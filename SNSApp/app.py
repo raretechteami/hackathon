@@ -1,0 +1,324 @@
+from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
+from flask_wtf.csrf import CSRFProtect
+from datetime import timedelta
+import hashlib
+import os
+import re
+import uuid
+
+
+
+from models import User, Post, Comment
+
+
+
+
+# 定数定義
+EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+SESSION_DAYS = 30
+
+app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY', uuid.uuid4().hex)
+app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
+
+csrf = CSRFProtect(app)
+
+
+
+
+
+# ルートページのリダイレクト処理
+@app.route('/', methods=['GET'])
+def index():
+    user_id=session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('posts_views'))
+
+
+# サインアップページの表示
+@app.route('/userRegist', methods=['GET'])
+def sign_up_view():
+    if session.get('user_id') is not None:
+        return redirect(url_for('posts_view'))
+    return render_template('')
+
+
+
+
+
+
+# サインアップ処理
+@app.route('/userRegist', methods=['POST'])
+def signup_process():
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    password = request.form.get('password', '').strip()
+    password_confirm = request.form.get('password_confirm', '').strip()
+
+    # 空チェック
+    if not name or not email or not password or not password_confirm:
+        flash("すべての項目を入力してください。", "error")
+        return redirect(url_for('sign_up_view'))
+    
+    # パスワード一致チェック
+    if password != password_confirm:
+        flash("パスワードが一致しません。", "error")
+        return redirect(url_for('sign_up_view'))
+    
+    # メール形式チェック
+    if re.match(EMAIL_PATTERN, email) is None:
+        flash('メールアドレスは正しい形式で入力してください。', 'error')
+        return redirect(url_for('sign_up_view'))
+    
+    # 既存ユーザーチェック
+    registered_user = User.find_by_email(email)
+    if registered_user is not None:
+        flash('既に登録されているメールアドレスです。', 'error')
+        return redirect(url_for('sign_up_view'))
+    
+    # パスワードのハッシュ化
+    hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    # Userのcreateメソッドを呼び出してユーザーを作成し、user_idを取得
+    user_id = User.create(name, email, hashed_password)
+
+    # セッションにuser_idをキー名user_idで保存
+    session['user_id'] = user_id
+
+    return redirect(url_for('posts_view'))
+
+
+
+
+
+#  ログインページの表示
+@app.route('/login', methods=['GET'])
+def login_view():
+    if session.get('user_id') is not None:
+        return redirect(url_for('posts_view'))
+    return render_template('')    
+
+
+
+
+# ログイン処理
+@app.route('/login', methods=['POST'])
+def login_process():
+    email = request.form.get('email','').strip()
+    password = request.form.get('password', '')
+
+    if email == '' or password == '':
+        flash('メールアドレスかパスワードが入力されていません。', 'error')
+    else:
+        user = User.find_by_email(email)
+        if user is None:
+            flash('メールアドレスかパスワードが間違っています。', 'error')
+        
+        else:
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user["password"]:
+                flash('メールアドレスかパスワードが間違っています。', 'error')
+            else:
+                session['user_id'] = user["id"]
+                return redirect(url_for('posts_view'))
+    return redirect(url_for('login_view'))
+
+
+
+
+
+# ログアウト
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return redirect(url_for('login_view'))
+
+
+
+# 投稿一覧ページの表示
+@app.route('/posts', methods=['GET'])
+def posts_view():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    else:
+        posts = Post.get_all_posts()
+        for post in posts:
+            post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
+            post['user_name'] = User.get_name_by_id(post['user_id'])
+            post['comment_count'] = Comment.get_count_by_post_id(post['id'])
+
+            return render_template('',posts=posts,user_id=user_id)
+
+
+
+
+
+# 投稿処理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 投稿削除処理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 投稿詳細ページの表示
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# コメント処理
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# エラーハンドリング
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
