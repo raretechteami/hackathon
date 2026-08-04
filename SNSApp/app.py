@@ -8,7 +8,7 @@ import uuid
 
 
 
-from models import User, Post, Comment
+from models import User, Post, Comment, ConvenienceStore
 
 
 
@@ -190,25 +190,6 @@ def posts_view():
 
 
 
-# 投稿削除処理
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -225,37 +206,65 @@ def posts_view():
 
 
 # 投稿詳細ページの表示
+@app.route('/posts/<int:post_id>', methods=['GET'])
+def post_detail_view(post_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    post = Post.find_by_id(post_id)
+    if post is None:
+        abort(404)
 
+    stores = ConvenienceStore.get_all()
 
+    comments = Comment.get_by_post_id(post_id)
 
+    return render_template(
+        'post/post_detail.html',
+        post=post,
+        stores=stores,
+        comments=comments
+    )
 
+# 編集内容の保存処理
+@app.route('/posts/<int:post_id>', methods=['POST'])
+def update_post(post_id):
+    user_id = session.get(user_id)
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    post = Post.find_by_id(post_id)
+    if post is None or post['user_id'] != user_id:
+        flash('投稿の編集権限がありません。', 'error')
+        return redirect(url_for('posts_view'))
+    
+    product_name = request.form.get('product_name')
+    store_id = request.form.get('store_id')
+    calories_kcal = request.form.get('calories_kcal')
+    sugar_g = request.form.get('sugar_g')
+    price_yen = request.form.get('price_yen')
+    content = request.form.get('content')
 
+    image_file = request.files.get('image')
+    image_path = post['image_path']
+    if image_file and image_file.filename != '':
+        image_path = Post.save_image(image_file)
+        image_file.save(f"./static/images/{image_path}")
+    
+    Post.update(
+        post_id=post_id,
+        store_id=store_id,
+        product_name=product_name,
+        price_yen=price_yen,
+        calories_kcal=calories_kcal,
+        sugar_g=sugar_g,
+        image_path=image_path,
+        content=content  
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    flash('投稿が更新されました。', 'success')
+    return redirect(url_for('posts_view'))
 
 
 
@@ -264,41 +273,43 @@ def posts_view():
 
 
 # コメント処理
+@app.route('/posts/<int:post_id>/comments', methods=['POST'])
+def add_comment(post_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    comment_text = request.form.get('comment_text','').strip()
+    if comment_text == '':
+        flash('コメントを入力してください。', 'error')
+        return redirect(url_for('post_detail_view', post_id=post_id))
+    
+    Comment.create(
+        user_id=user_id,
+        post_id=post_id,
+        comment_text=comment_text
+    )
 
+    return redirect(url_for('post_detail_view', post_id=post_id))
 
+# 投稿削除処理
+@app.route('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    post = Post.find_by_id(post_id)
+    if post is None:
+        abort(404)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if post[user_id] != user_id:
+        flash('投稿の削除権限がありません。', 'error')
+        return redirect(url_for('posts_view'))
+    
+    Post.delete(post_id)
+    flash('投稿が削除されました。','success')
+    return redirect(url_for('posts_view'))
 
 
 
