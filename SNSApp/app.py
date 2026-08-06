@@ -315,18 +315,22 @@ def delete_post(post_id):
 
 
 # エラーハンドリング
+@app.errorhandler(400)
+def bad_request(error):
+    return render_template('error/400.html'), 400
 
 
+@app.errorhandler(403)
+def admin_error(error):
+    return render_template('error/403.html'), 403
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error/404.html'), 404
 
-
-
-
-
-
-
-
-
+@app.errorhandler(500)
+def server_error(error):
+    return render_template('error/500.html'), 500
 
 
 
