@@ -61,11 +61,10 @@ class Post:
         try:
             with conn.cursor() as cur:
                 sql = """
-                    SELECT posts.*, user_posts.user_id 
+                    SELECT * 
                     FROM posts 
-                    JOIN user_posts ON posts.id = user_posts.post_id 
-                    WHERE posts.delete_flag = FALSE 
-                    ORDER BY posts.created_at DESC;
+                    WHERE delete_flag = FALSE 
+                    ORDER BY created_at DESC;
                 """
                 cur.execute(sql)
                 posts = cur.fetchall()
@@ -124,10 +123,9 @@ class Post:
         try:
             with conn.cursor() as cur:
                 sql = """
-                    SELECT posts.*, user_posts.user_id
+                    SELECT *
                     FROM  posts
-                    JOIN user_posts ON posts.id = user_posts.post_id
-                    WHERE posts.id = %s AND posts.delete_flag = FALSE;
+                    WHERE id = %s AND delete_flag = FALSE;
                 """
                 cur.execute(sql,(post_id,))
                 post = cur.fetchone()
@@ -146,7 +144,7 @@ class Post:
             with conn.cursor() as cur:
                 sql = """
                     UPDATE posts
-                    SET store_id = %s, product_name = %s, price_yen = %s, calories_kcal = %s, sugar_g = %s, image_path = %s, content = %s, created_at = NOW(), updated_at = NOW()
+                    SET store_id = %s, product_name = %s, price_yen = %s, calories_kcal = %s, sugar_g = %s, image_path = %s, content = %s, updated_at = NOW()
                     WHERE id = %s;
                 """
                 cur.execute(sql,(store_id, product_name, price_yen, calories_kcal, sugar_g, image_path, content, post_id))

@@ -33,7 +33,7 @@ def index():
     user_id=session.get('user_id')
     if user_id is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('posts_views'))
+    return redirect(url_for('posts_view'))
 
 
 # サインアップページの表示
@@ -41,7 +41,7 @@ def index():
 def sign_up_view():
     if session.get('user_id') is not None:
         return redirect(url_for('posts_view'))
-    return render_template('')
+    return render_template('auth/signup.html')
 
 
 
@@ -97,7 +97,7 @@ def signup_process():
 def login_view():
     if session.get('user_id') is not None:
         return redirect(url_for('posts_view'))
-    return render_template('')    
+    return render_template('auth/login.html')    
 
 
 
@@ -149,7 +149,7 @@ def posts_view():
             post['user_name'] = User.get_name_by_id(post['user_id'])
             post['comment_count'] = Comment.get_count_by_post_id(post['id'])
 
-            return render_template('',posts=posts,user_id=user_id)
+        return render_template('post/posts.html',posts=posts,user_id=user_id)
 
 
 
@@ -230,7 +230,7 @@ def post_detail_view(post_id):
 # 編集内容の保存処理
 @app.route('/posts/<int:post_id>', methods=['POST'])
 def update_post(post_id):
-    user_id = session.get(user_id)
+    user_id = session.get("user_id")
     if user_id is None:
         return redirect(url_for('login_view'))
     
@@ -239,18 +239,25 @@ def update_post(post_id):
         flash('投稿の編集権限がありません。', 'error')
         return redirect(url_for('posts_view'))
     
-    product_name = request.form.get('product_name')
-    store_id = request.form.get('store_id')
-    calories_kcal = request.form.get('calories_kcal')
-    sugar_g = request.form.get('sugar_g')
-    price_yen = request.form.get('price_yen')
-    content = request.form.get('content')
+    product_name = request.form.get('product_name', '').strip()
+    store_id = request.form.get('store_id', '').strip()
+    calories_kcal = request.form.get('calories_kcal', '').strip()
+    sugar_g = request.form.get('sugar_g', '').strip()
+    price_yen = request.form.get('price_yen', '').strip()
+    content = request.form.get('content', '').strip()
+
+   
+    product_name = product_name if product_name else post['product_name']
+    store_id = int(store_id) if store_id else post['store_id']
+    price_yen = int(price_yen) if price_yen else post['price_yen']
+    calories_kcal = float(calories_kcal) if calories_kcal else post['calories_kcal']
+    sugar_g = float(sugar_g) if sugar_g else post['sugar_g']
+    content = content if content else post['content']
 
     image_file = request.files.get('image')
     image_path = post['image_path']
     if image_file and image_file.filename != '':
         image_path = Post.save_image(image_file)
-        image_file.save(f"./static/images/{image_path}")
     
     Post.update(
         post_id=post_id,
@@ -293,7 +300,7 @@ def add_comment(post_id):
     return redirect(url_for('post_detail_view', post_id=post_id))
 
 # 投稿削除処理
-@app.route('/posts/<int:post_id>/delete')
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
 def delete_post(post_id):
     user_id = session.get('user_id')
     if user_id is None:
@@ -303,7 +310,7 @@ def delete_post(post_id):
     if post is None:
         abort(404)
 
-    if post[user_id] != user_id:
+    if post['user_id'] != user_id:
         flash('投稿の削除権限がありません。', 'error')
         return redirect(url_for('posts_view'))
     
