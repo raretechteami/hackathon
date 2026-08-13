@@ -23,8 +23,11 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
-
-
+PLOAD_FOLDER = './static/uploads/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # ルートページのリダイレクト処理
@@ -157,6 +160,50 @@ def posts_view():
 
 # 投稿処理
 
+@app.route('/posts', methods=['POST'])
+def create_post():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    product_name = request.form.get('product_name', '').strip()
+    store_id = request.form.get('store_id', '').strip()
+    calories_kcal = request.form.get('calories_kcal', '').strip()
+    sugar_g= request.form.get('sugar_g', '').strip()
+    price_yen = request.form.get('price_yen', '').strip()
+    content = request.form.get('content', '').strip()
+    if product_name == '':
+        flash('商品名が空です','error')
+        return redirect(url_for('posts_view'))
+    if store_id == '':
+        flash('店舗名が空です','error')
+        return redirect(url_for('posts_view'))
+    if calories_kcal == '':
+            flash('カロリーが空です','error')
+            return redirect(url_for('posts_view'))
+    if sugar_g == '':
+        flash('糖質が空です','error')
+        return redirect(url_for('posts_view'))
+    if price_yen == '':
+        flash('価格が空です','error')
+        return redirect(url_for('posts_view'))
+    if content == '':
+        flash('投稿内容が空です','error')
+        return redirect(url_for('posts_view'))
+    file = request.files['file']
+    if (not file):
+        flash('画像ファイルがありません','error')
+        return redirect(url_for('posts_view'))
+    if allowed_file(file.filename):
+            unique_id = uuid.uuid4().hex[:6]
+            image_name =  unique_id + str(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER,image_name))
+            image_path = UPLOAD_FOLDER + image_name
+    else:
+        flash('画像ファイルを選んでください','error')
+        return redirect(url_for('posts_view'))
+    Post.create(user_id,item,store,image_path,content)
+    flash('投稿が完了しました','success')
+    return redirect(url_for('posts_view'))
 
 
 
