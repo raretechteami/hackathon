@@ -23,7 +23,7 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 
 csrf = CSRFProtect(app)
 
-PLOAD_FOLDER = './static/uploads/'
+UPLOAD_FOLDER = './static/uploads/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
@@ -201,7 +201,7 @@ def create_post():
     else:
         flash('画像ファイルを選んでください','error')
         return redirect(url_for('posts_view'))
-    Post.create(user_id,item,store,image_path,content)
+    Post.create(user_id,product_name,store_id,calories_kcal,sugar_g,price_yen,image_path,content)
     flash('投稿が完了しました','success')
     return redirect(url_for('posts_view'))
 
