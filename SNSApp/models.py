@@ -79,6 +79,20 @@ class Post:
     # createメソッド追加
 
 
+    @classmethod
+                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
+    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
+        conn = db_pool.get_conn()
+        try:
+             with conn.cursor() as cur:
+                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
+                cur.execute(sql,(user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています：{e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
 
 
 
