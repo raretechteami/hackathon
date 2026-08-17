@@ -51,7 +51,7 @@ CREATE TABLE
         content TEXT NOT NULL,
         created_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updated_at DATETIME (6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-        deleted_flag BOOLEAN  NOT NULL,
+        delete_flag BOOLEAN  DEFAULT 0 NOT NULL,
         PRIMARY KEY (id),
         KEY idx_posts_user_id (user_id),
         KEY idx_posts_store_id (store_id),
@@ -91,7 +91,7 @@ VALUES
   (6, 'デイリーヤマザキ'),
   (7, 'まいばすけっと');
 
-INSERT INTO posts (user_id, store_id, product_name, price_yen, calories_kcal, sugar_g, image_path, content, deleted_flag)
+INSERT INTO posts (user_id, store_id, product_name, price_yen, calories_kcal, sugar_g, image_path, content, delete_flag)
 VALUES
   (1, 1, 'こんにゃくチップスのりしお', 100, 58.0, 5.0, './static/uploads/sample_chips.png', 'こんにゃく素材とは思えないサクサク軽くて、のりしおの風味がしっかり効いていて大満足！！
   1袋あたりの糖質が5g、食物繊維も豊富でヘルシーで嬉しいです。', 0 ),
