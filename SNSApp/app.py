@@ -218,40 +218,6 @@ def create_post():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 投稿詳細ページの表示
 @app.route('/posts/<int:post_id>', methods=['GET'])
 def post_detail_view(post_id):

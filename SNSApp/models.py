@@ -80,8 +80,7 @@ class Post:
 
 
     @classmethod
-                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
-    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
+    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content):
         conn = db_pool.get_conn()
         try:
              with conn.cursor() as cur:
@@ -93,26 +92,6 @@ class Post:
             abort(500)
         finally:
             db_pool.release(conn)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
