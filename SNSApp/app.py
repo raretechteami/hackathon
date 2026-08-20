@@ -163,6 +163,8 @@ def posts_view():
 @app.route('/posts', methods=['POST'])
 def create_post():
     user_id = session.get('user_id')
+    stores = ConvenienceStore.get_all()
+    
     if user_id is None:
         return redirect(url_for('login_view'))
     product_name = request.form.get('product_name', '').strip()
