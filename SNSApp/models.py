@@ -80,7 +80,6 @@ class Post:
 
 
     @classmethod
-                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
     def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
         conn = db_pool.get_conn()
         try:
@@ -97,9 +96,26 @@ class Post:
 
 
 
+    #コンビニデータ取得
 
-
-
+class store:
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                    SELECT * 
+                    FROM  ConvenienceStore ORDER BY ASC;
+                cur.execute(sql)
+                 ConvenienceStore = cur.fetchall()
+            
+            return  ConvenienceStore
+        except pymysql.Error as e:
+            print(f'システムエラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
 
 
 
