@@ -80,7 +80,6 @@ class Post:
 
 
     @classmethod
-                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
     def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
         conn = db_pool.get_conn()
         try:
@@ -99,7 +98,7 @@ class Post:
 
     #コンビニデータ取得
 
-class Post:
+class store:
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
@@ -107,7 +106,7 @@ class Post:
             with conn.cursor() as cur:
                 sql = """
                     SELECT * 
-                    FROM  ConvenienceStore;
+                    FROM  ConvenienceStore ORDER BY ASC;
                 cur.execute(sql)
                  ConvenienceStore = cur.fetchall()
             
