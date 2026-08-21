@@ -1,139 +1,210 @@
-{% extends "base.html" %} {% block title %}投稿詳細 - {{ post.product_name }}{%
-endblock %} {% block page_css %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='../../../static/css/posts.css') }}"
-/>
-{% endblock %} {% block content %}
-<div class="container detail-container">
-  <!-- 1. 一覧に戻るボタン -->
-  <div class="top-nav">
-    <button type="button" onclick="location.href='/posts'" class="btn-back">
-      一覧に戻る
-    </button>
-  </div>
 
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
-  messages %}
-  <div class="flash-messages">
-    {% for category, message in messages %}
-    <div class="flash flash-{{ category }}">{{ message }}</div>
-    {% endfor %}
-  </div>
-  {% endif %} {% endwith %}
+{% extends "base.html" %}
 
-  <!-- 2. 投稿詳細カード -->
-  <div class="card post-detail-card">
-    <div class="post-card-inner">
-      <!-- 左側：商品画像 -->
-      <div class="post-image-box">
-        {% if post.image_path %}
-        <img
-          src="{{ url_for('static', filename='uploads/' + post.image_path) }}"
-          alt="{{ post.product_name }}"
-          class="product-image"
-        />
-        <!-- {% else %}
-        <img
-          src="{{ url_for('static', filename='images/default_food.png') }}"
-          alt="画像なし"
-          class="product-image"
-        /> -->
-        {% endif %}
-      </div>
+{% block title %}自ユーザー投稿詳細画面{% endblock %}
 
-      <!-- 右側：商品情報 -->
-      <div class="post-info-box">
-        <!-- 投稿者ニックネーム -->
-        <div class="post-user-header">{{ post.user_name }}</div>
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post_detail.css') }}">
+{% endblock %}
 
-        <!-- 商品名 & 店舗名 -->
-        <h2 class="product-name">{{ post.product_name }}</h2>
-        <p class="store-name">{{ post.store_name }}</p>
+{% block content %}
 
-        <div class="stats-grid">
-          <!-- カロリー -->
-          <div class="stat-badge badge-yellow">
-            <span class="stat-label">カロリー</span>
-            <span class="stat-value">
-              {{ post.calories_kcal }} <small>kcal</small>
-            </span>
-          </div>
+<main class="post-detail">
 
-          <!-- 糖分 -->
-          <div class="stat-badge badge-yellow">
-            <span class="stat-label">糖分</span>
-            <span class="stat-value">{{ post.sugar_g }} <small>g</small></span>
-          </div>
-
-          <!-- 価格 -->
-          <div class="stat-badge badge-gray">
-            <span class="stat-label">価格</span>
-            <span class="stat-value">
-              {{ post.price_yen }} <small>円</small>
-            </span>
-          </div>
-
-          <!-- コメント数 -->
-          <div class="stat-badge badge-gray">
-            <span class="stat-label">コメント</span>
-            <span class="stat-value">
-              {{ comments|length if comments else 0 }}
-            </span>
-          </div>
-        </div>
-      </div>
+    <!-- 一覧に戻る -->
+    <div class="top-nav">
+        <button type="button" onclick="location.href='/posts'" class="btn-back">
+            一覧に戻る
+        </button>
     </div>
 
-    <!-- 投稿本文（説明文）がある場合 -->
-    {% if post.content %}
-    <div class="post-description">
-      <p>{{ post.content }}</p>
+    <!-- 投稿概要 -->
+     <div class="post-summary">
+
+         <!-- 商品画像 -->
+        <div class="post-summary-image">
+            <img src="{{ url_for('static', filename=post.image_path) }}" alt="商品画像">
+     </div>
+        <!-- ニックネーム -->
+         <p class="summary-nickname">
+            {{ post.user_name }}
+        </p>
+
+         <!-- 商品名 -->
+        <p class="summary-product-name">
+            {{ post.product_name }}
+        </p>
+
+        <!-- 店舗 ここ怪しい-->
+         <p class="summary-store">
+            {{ post.store_id }}
+        </p>
+        
+        <!-- カロリー・糖分 -->
+         <div class="summary-nutrition">
+
+            <div class="summary-calories">
+                <span>カロリー</span>
+                <span>{{ post.calories_kcal }} kcal</span>
+            </div>
+        
+            <div class="summary-sugar">
+                <span>糖分</span>
+                <span>{{ post.sugar_g }} g</span>
+            </div>
+        
+         </div>
+
+        <!-- 価格・コメント数 -->
+         <div class="summary-info">
+
+            <div class="summary-price">
+                <span>価格</span>
+                <span>{{ post.price_yen }} 円</span>
+            </div>
+        
+            <div class="summary-comments">
+                <span>コメント</span>
+                <span>{{ comments|length }}</span>
+            </div>      
+
+         </div>
+
+     </div>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <!-- 商品名 -->
+    <div class="form-group">
+
+        <label for="product_name">商品名</label>
+        <input
+            type="text"
+            id="product_name"
+            name="product_name"
+            value="{{ post.product_name }}"
+        >
     </div>
-    {% endif %}
-  </div>
 
-  <!-- 3. コメントセクション -->
-  <div class="card comments-card">
-    <h3 class="section-title">コメント</h3>
+    <!-- 店舗 -->
+     <div class="form-group">
 
-    <!-- コメント入力フォーム -->
-    <form
-      action="{{ url_for('add_comment', post_id=post.id) }}"
-      method="post"
-      class="comment-form"
-    >
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="store_id">店舗</label>
+        <select id="store_id" name="store_id">
+            <option value="">▼ 選択してください</option>
+            
+            {% for store in stores %}
+                <option value="{{ store.id }}"
+                     {% if store.id == post.store_id %}selected{% endif %}>
+                    {{ store.name }}
+                </option>
+            {% endfor %}
 
-      <div class="form-group">
+        </select>
+    </div>
+
+    <!-- 価格 -->
+    <div class="form-group">
+
+        <label for="price_yen">価格（円）</label>
+
+        <input
+            type="number"
+            id="price_yen"
+            name="price_yen"
+            value="{{ post.price_yen }}"
+        >
+
+    </div>
+
+    <!-- カロリー・糖分 -->
+    <div class="form-group">
+
+        <label for="calories_kcal">カロリー (kcal) </label>
+        <input
+            type="number"
+            id="calories_kcal"
+            name="calories_kcal"
+            value="{{ post.calories_kcal }}"
+        > 
+    </div>   
+
+    <div class="form-group">
+
+        <label for="sugar_g">糖分 (g) </label>
+        <input
+            type="number"
+            id="sugar_g"
+            name="sugar_g"
+            step="0.1"
+            value="{{ post.sugar_g }}"
+        >
+    </div>
+
+    <!-- 商品画像 -->
+    <div class="form-group">
+        <label for="image">商品画像</label>
+        <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+        >
+    </div>
+
+    <!-- コメント -->
+    <div class="form-group">
+        <label for="content">コメント</label>
+
         <textarea
-          name="comment_text"
-          class="comment-textarea"
-          placeholder="コメントを入力してください"
-          rows="4"
-          required
-        ></textarea>
-      </div>
+            id="content"
+            name="content"
+            >{{ post.content }}</textarea>
+    </div>
 
-      <div class="form-submit">
-        <button type="submit" class="btn-submit-comment">コメントする</button>
-      </div>
-    </form>
+    <!-- 編集完了 -->
+    <div class="form-buttons">
+
+        <button type="submit" class="edit-button">
+            編集完了
+        </button>
+
+    </div> 
+
+</form>
+
+    <!-- 削除 -->
+    <div class="delete-button-area">
+
+        <button type="button" class="delete-button">
+            削除
+        </button>
+
+    </div>
 
     <!-- コメント一覧 -->
     <div class="comment-list">
-      {% if comments %} {% for comment in comments %}
-      <div class="comment-item">
-        <div class="comment-header">
-          <span class="comment-user">{{ comment.user_name }}</span>
-          <span class="comment-date">{{ comment.created_at }}</span>
+
+        {% for comment in comments %}
+
+        <div class="comment-item">
+            <!-- ニックネーム -->
+             <p class="comment-user-name">
+              {{ comment.user_name }}
+             </p>
+
+            <!-- 投稿日時 -->
+             <p class="comment-date">
+                {{ comment.created_at }}
+             </p>
+
+            <!-- コメント本文 -->
+             <p class="comment-content">
+                 {{ comment.content }}
+             </p>
         </div>
-        <div class="comment-body">{{ comment.content }}</div>
-      </div>
-      {% endfor %} {% else %}
-      <div class="no-comments">まだコメントはありません。</div>
-      {% endif %}
+    {% endfor %}
     </div>
-  </div>
-</div>
-{% endblock %}
+</main>
+
+

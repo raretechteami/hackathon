@@ -1,0 +1,71 @@
+{% extends "base.html"%}
+
+{% block title %}新規会員登録 - おやつサポート{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css')}}">
+{% endblock %}
+
+
+{% block content %}
+<div class="page-auth">
+
+    <div class="auth-logo">
+        <img src="{{ url_for('static', filename='images/logo.svg')}}" alt="おやつサポート">
+    </div>
+
+    <main class="page-auth-main">
+        <div class="auth-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="auth-title">新規会員登録</h2>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+        
+
+　　　　　　　　　<form class="auth-form" method="post">
+    　　　　　　　　<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                   <div class="form-group">
+                    <label>ニックネーム</label>
+                    <input type="text" name="nickname">
+                   </div>
+
+                   <div class="form-group">
+                    <label>メールアドレス</label>
+                    <input type="text" name="email">
+                   </div>
+
+                   <div class="form-group">
+                    <label>パスワード</label>
+                    <input type="password" name="password">
+                   </div>
+
+                   <div class="form-group">
+                    <label>パスワード（確認用）</label>
+                    <input type="password" name="password_confirm">
+                   </div>
+
+                   <div class="auth-button-container">
+                    <button class="auth-button" type="submit">登録する</button>
+                   </div>
+
+                </form>
+                <div class="switch-auth-mode">
+                    <a href="{{ url-for('login_view')}}">ログイン画面へ戻る</a>
+                </div>
+           </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
