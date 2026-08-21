@@ -81,8 +81,6 @@ class Post:
 
     @classmethod
     def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content):
-
-    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
         conn = db_pool.get_conn()
         try:
              with conn.cursor() as cur:
@@ -109,9 +107,10 @@ class ConvenienceStore:
             with conn.cursor() as cur:
                 sql = """
                     SELECT * 
-                    FROM  ConvenienceStore ORDER BY id ASC""";
+                    FROM  convenience_store ORDER BY id ASC;
+                    """
                 cur.execute(sql)
-                 ConvenienceStore = cur.fetchall()
+                ConvenienceStore = cur.fetchall()
             
             return  ConvenienceStore
         except pymysql.Error as e:
