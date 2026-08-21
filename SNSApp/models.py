@@ -101,7 +101,7 @@ class Post:
 
     #コンビニデータ取得
 
-class store:
+class ConvenienceStore:
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
