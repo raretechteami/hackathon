@@ -1,0 +1,109 @@
+.page-auth {
+    min-height: 100vh;
+    background: #FFE7A1;
+}
+.auth-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 41px;
+}
+
+.auth-logo img {
+    width: 260.32px;
+    height: auto;
+}
+
+.page-auth-main {
+    display: flex;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.auth-wrapper {
+    width: 100%;
+    max-width: 339px;
+}
+
+.card {
+    box-sizing: border-box;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 38px 20px;
+    
+}
+
+.auth-title {
+    margin: 0 0 35px;
+    font-family: "Inter", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 5.61px;
+}
+
+.form-group + .form-group {
+    margin-top: 25.13px;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"]{
+    width: 100%;
+    height: 35.82px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #000000;
+    background: #ffffff;
+}
+
+.auth-button-container {
+  margin-top: 38.13px;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-button {
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-radius: 20px;
+    background: #AFF4C6;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.switch-auth-mode {
+  margin-top: 37.27px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0FB04A;
+  text-align: center;
+}
+
+.signup-link {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0FB04A;
+}
+
+
+
+
+
+
+
+
+
+

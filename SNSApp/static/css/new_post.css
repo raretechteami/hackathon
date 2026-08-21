@@ -1,0 +1,145 @@
+/* =========================
+   ユーザー投稿画面
+   ========================= */
+
+.new-post {
+    width: 402px;
+    min-height: 874px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 97px 14px 0;
+    background-color: var(--bg);
+}
+
+
+/* =========================
+   投稿フォーム
+   ========================= */
+
+.new-post form {
+    width: 374px;
+    min-height: 660px;
+    margin: 0 auto;
+    padding: 61px 12px 40px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+}
+
+
+/* =========================
+   入力項目
+   ========================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+
+/* 商品名 */
+
+.form-group input[type="text"] {
+    width: 350px;
+    height: 26px;
+    box-sizing: border-box;
+    border: 1px solid #AEAEB2;
+    border-radius: 6px;
+}
+
+/* 店舗・価格 */
+
+.form-row {
+    display: flex;
+    gap: 18px;
+    margin-top: 50px;
+}
+
+.form-group select {
+    width: 166px;
+    height: 26px;
+    box-sizing: border-box;
+    border: 1px solid #AEAEB2;
+    border-radius: 6px;
+}
+
+.form-group input[type="number"] {
+    width: 166px;
+    height: 26px;
+    box-sizing: border-box;
+    border: 1px solid #AEAEB2;
+    border-radius: 6px;
+}
+
+.form-group input[type="file"] {
+    width: 356px;
+    height: 32px;
+    box-sizing: border-box;
+    border: 1px solid #AEAEB2;
+    border-radius: 6px;
+}
+
+.form-group input[type="file"]::file-selector-button {
+    font-family: Inter, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+/* コメント */
+
+.form-group textarea {
+    width: 325px;
+    height: 164px;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #AEAEB2;
+    border-radius: 8px;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    resize: none;
+}
+
+.form-group textarea::placeholder {
+    color: #D9D9D9;
+}
+
+/* =========================
+   ボタン
+   ========================= */
+
+.form-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cancel-button,
+.draft-button {
+    width: 108px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.post-button {
+    width: 97px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    background: #AFF4C6;
+    color: #000000;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}

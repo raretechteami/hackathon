@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}投稿一覧画面{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <header>
+    <!-- ここにログアウト、新規作成 -->
+      <div class="header-inner">
+    
+    {% if session.get('user_id') %}
+    <a class="logout" href="{{ url_for('logout') }}">ログアウト</a>
+    {% endif %}
+
+     <a class="new-post" href="/posts/newPost">新規作成</a>
+  </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <!-- 投稿一覧画の内容 -->
+    </div>
+    <div class="post-list-actions">
+      <span class="edit"> 編集 </span>
+      <span>/</span>
+      <span class="delate"> 削除 </span>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% for post in posts %}
+      <div class="post-card">
+        <div class="post-content">
+
+          <div class="post-header">
+            <div class="post-user-info">
+              <p class="display-name">{{ post.user_name }}</p>
+              <p class="post-time">{{ post.created_at }}</p>
+            </div>
+          </div>
+            
+          <div class="post-body">
+            <img src="{{ url_for('static', filename=post.image_path) }}"
+                 alt="{{ post.product_name }}">
+            <div class="product_name">
+              {{ post.product_name }}
+            </div>
+
+            <!-- ここpython要確認 -->
+            <div class="store_name">
+              {{ post.store_name }}
+            </div>
+
+          <div class="nutrition-info">
+            <div class="calories_kcal">
+              <div class="calories-label">カロリー</div>
+              <div class="calories-value">
+                {{ post.calories_kcal }}
+                <span class="calories-unit">kcal</span>
+              </div>
+            </div>
+
+            <div class="sugar_g">
+              <div class="sugar-label">糖分</div>
+              <div class="sugar-value">
+                {{ post.sugar_g }}
+                <span class="sugar-unit">g</span>
+              </div>
+            </div>
+              
+          </div>
+          <div class="post-footer">
+            <div class="post-actions">
+              <!-- コメント数 -->
+               <span class="comment-count">
+                コメント ({{ post.comment_count }})
+               </span>
+              
+              <a class="detail" href="/posts/{{ post.id }}">詳細</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </main>
+</div>
+{% endblock %}
+
+              

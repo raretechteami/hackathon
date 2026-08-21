@@ -1,0 +1,64 @@
+{% extends "base.html"%}
+
+{% block title %}ログイン - おやつサポート{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}">
+{% endblock %}
+
+
+{% block content %}
+<div class="page-auth">
+
+    <!-- ここheader.htmlがあるから不要 -->
+    <div class="auth-logo">
+        <img src="{{ url_for('static', filename='images/logo.svg')}}" alt="おやつサポート">
+    </div>
+
+    <main class="page-auth-main">
+        <div class="auth-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="auth-title">ログイン</h2>
+                    <p class="card-subtitle">
+                        登録済みのメールアドレスと<br>
+                        パスワードを入力してください
+                    </p>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+        
+
+　　　　　　　　　<form class="auth-form" method="post">
+    　　　　　　　　<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    　　　　　　　　<div class="form-group">
+        　　　　　　　<label>メールアドレス</label>
+        　　　　　　　<input type="text" placeholder="メールアドレス" name="email" />
+    　　　　　　　</div>
+
+    　　　　　　　<div class="form-group">
+        　　　　　　　<label>パスワード</label>
+       　　　　　　　 <input type="password" placeholder="パスワード" name="password" />
+    　　　　　　　</div>
+
+    　　　　　　　<div class="auth-button-container">
+        　　　　　　<button class="auth-button" type="submit">ログイン</button>
+        　　　　　　<a class="switch-auth-mode" href="{{ url_for('signup_view')}}">
+            　　　　　<span>初めて利用する方は</span>
+                     <span class="signup-link">新規会員登録</span>
+        　　　　　　</a>
+    　　　　　　　</div>
+　　　　　　　 </form>
+           </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
