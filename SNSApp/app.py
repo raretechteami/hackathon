@@ -220,40 +220,6 @@ def create_post():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 投稿詳細ページの表示
 @app.route('/posts/<int:post_id>', methods=['GET'])
 def post_detail_view(post_id):
@@ -265,7 +231,13 @@ def post_detail_view(post_id):
     if post is None:
         abort(404)
 
+    post['user_name'] = User.get_name_by_id(post['user_id'])
+    post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
+    
     stores = ConvenienceStore.get_all()
+   
+    store_dict = {store['id']: store['name'] for store in stores}
+    post['store_name'] = store_dict.get(post['store_id'], '')
 
     comments = Comment.get_by_post_id(post_id)
 
@@ -273,7 +245,8 @@ def post_detail_view(post_id):
         'post/post_detail.html',
         post=post,
         stores=stores,
-        comments=comments
+        comments=comments,
+        user_id=user_id
     )
 
 # 編集内容の保存処理
