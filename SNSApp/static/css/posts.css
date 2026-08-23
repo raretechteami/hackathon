@@ -1,81 +1,141 @@
-.list-page-header,
-.detail-page-header {
-  position: absolute;
-  z-index: 3;
+
+* {
+  box-sizing: border-box;
 }
-.list-page-header {
-  top: 75px;
-  left: 26px;
-  right: 26px;
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-gray);
+  color: var(--text-black);
+  font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  line-height: 1.2;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* 画面03：投稿一覧 */
+
+.page {
+  width: 402px;
+  max-width: 100%;
+  min-height: 874px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background: var(--background-yellow);
+}
+
+.page > header {
+  padding-top: 75px;
+}
+
+.header-inner {
   display: flex;
+  width: calc(100% - 52px);
   height: 40px;
+  margin: 0 auto;
   align-items: center;
   justify-content: space-between;
 }
-.list-page-header .header-text-link {
+
+.logout {
+  color: var(--text-black);
   font-size: 16px;
+  font-weight: 700;
+  text-decoration: underline;
 }
-.detail-page-header {
-  top: 62px;
-  left: 14px;
-}
-.app-shell:has(.owner-edit-form) .detail-page-header {
-  top: 59px;
-}
-.new-post-button {
+
+.new-post {
+  display: inline-flex;
   width: 90px;
   height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--card-white);
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
 }
-.back-button {
-  width: 97px;
-  height: 40px;
-}
-.posts-page,
-.form-page,
-.detail-page,
-.new-post-form {
-  position: relative;
+
+.page main {
   width: 100%;
 }
-.product-list {
-  display: grid;
-  row-gap: 64px;
-  padding-top: 183px;
+
+.page-title {
+  height: 0;
 }
-.product-card {
+
+.post-list-actions {
+  width: 369px;
+  margin: 28px auto 23px;
+  padding-right: 15px;
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.post-list-actions .edit {
+  color: var(--text-black);
+}
+
+.post-list-actions .delate,
+.post-list-actions .delete {
+  color: var(--delete-link-red);
+}
+
+.flash-messages {
+  position: static;
+  width: 369px;
+  margin: -12px auto 16px;
+}
+
+.flash {
+  border-radius: 8px;
+  background: var(--card-white);
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.flash + .flash {
+  margin-top: 8px;
+}
+
+.flash-success {
+  color: var(--mint-green-dark);
+}
+
+.flash-error {
+  color: var(--danger-red);
+}
+
+.post-card {
   position: relative;
   width: 369px;
   height: 658px;
-  margin: 0 auto;
+  margin: 0 auto 64px;
   border-radius: 8px;
   background: var(--card-white);
 }
-.owner-actions {
-  position: absolute;
-  top: -43px;
-  right: 5px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 700;
+
+.post-content,
+.post-body {
+  position: static;
 }
-.owner-edit-link {
-  text-decoration: none;
-}
-.inline-delete-form {
-  display: inline;
-}
-.owner-delete-button {
-  border: 0;
-  background: transparent;
-  color: var(--delete-link-red);
-  font-size: 14px;
-  font-weight: 700;
-  padding: 0;
-  cursor: pointer;
-}
-.product-image {
+
+.post-body img {
   position: absolute;
   top: 37px;
   left: 50%;
@@ -84,444 +144,507 @@
   transform: translateX(-50%);
   object-fit: cover;
 }
-.product-information {
+
+.post-header {
   position: absolute;
   top: 329px;
   left: 28px;
   right: 28px;
 }
-.poster-name,
-.product-name,
-.store-name,
-.comment-count,
-.detail-poster-name,
-.detail-product-name {
+
+.post-user-info,
+.display-name,
+.post-time {
   margin: 0;
 }
-.poster-name {
+
+.display-name {
   font-size: 14px;
+  font-weight: 400;
 }
-.posted-time {
-  display: block;
+
+.post-time {
   margin-top: 14px;
   color: var(--muted-gray);
   font-size: 10px;
   font-weight: 700;
 }
-.product-name {
-  margin-top: 19px;
+
+.product_name {
+  position: absolute;
+  top: 382px;
+  left: 28px;
+  right: 28px;
   font-size: 16px;
+  font-weight: 700;
 }
-.store-name {
-  margin-top: 29px;
+
+.store_name {
+  position: absolute;
+  top: 431px;
+  left: 28px;
+  right: 28px;
   font-size: 14px;
 }
-.nutrition-grid {
+
+.nutrition-info {
+  position: absolute;
+  top: 486px;
+  left: 31px;
+  right: 31px;
   display: flex;
   justify-content: space-between;
-  margin: 40px 3px 0;
 }
-.nutrition-item,
-.detail-metric-item {
+
+.calories_kcal,
+.sugar_g {
   display: grid;
-  align-content: center;
   width: 112px;
   height: 42px;
+  align-content: center;
   border-radius: 8px;
   background: var(--soft-yellow);
   padding: 4px 13px;
 }
-.nutrition-item dt,
-.detail-metric-item dt {
+
+.calories-label,
+.sugar-label {
   font-size: 10px;
   font-weight: 700;
 }
-.nutrition-item dd,
-.detail-metric-item dd {
-  margin: 4px 0 0;
+
+.calories-value,
+.sugar-value {
+  display: flex;
+  margin-top: 4px;
+  align-items: center;
   font-size: 14px;
 }
-.nutrition-item dd span,
-.detail-metric-item dd span {
+
+.calories-unit,
+.sugar-unit {
   margin-left: 8px;
 }
-.card-footer-row {
+
+.post-footer {
+  position: absolute;
+  top: 590px;
+  left: 31px;
+  right: 29px;
+}
+
+.post-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 62px 14px 0 3px;
 }
+
 .comment-count {
   font-size: 14px;
   font-weight: 700;
 }
-.detail-button {
+
+.detail {
+  display: inline-flex;
   width: 95px;
   height: 33px;
-  font-size: 16px;
-}
-.empty-card {
-  width: 369px;
-  margin: 183px auto 0;
-  border-radius: 8px;
-  background: var(--card-white);
-  padding: 24px 18px;
-  text-align: center;
-}
-.product-form-card,
-.detail-summary-card {
-  border-radius: 8px;
-}
-.new-post-form {
-  min-height: 874px;
-}
-.detail-page {
-  min-height: 874px;
-  padding-bottom: 32px;
-}
-.detail-page:not(:has(.owner-edit-form)) {
-  padding-top: 113px;
-}
-.detail-page:has(.owner-edit-form) {
-  padding-top: 110px;
-}
-.product-form-card {
-  width: 373px;
-  height: 661px;
-  margin: 0 auto;
-  padding: 61px 12px 0;
-  background: var(--card-white);
-}
-.new-post-form {
-  padding-top: 116px;
-}
-.two-column-form-grid,
-.detail-form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px 18px;
-}
-.full-row-field {
-  grid-column: 1 / -1;
-}
-.product-form-card
-.two-column-form-grid
-.form-field:nth-child(n + 4) {
-  margin-top: 12px;
-}
-.product-form-card .form-field,
-.owner-edit-card .form-field {
-  display: grid;
-}
-.product-form-card .form-field {
-  row-gap: 10px;
-}
-.owner-edit-card .form-field {
-  row-gap: 5px;
-}
-.product-form-card .field-label,
-.owner-edit-card .field-label {
-  margin-left: 6px;
-  font-size: 12px;
-  line-height: 1;
-}
-.product-form-card .text-input,
-.owner-edit-card .text-input {
-  width: 100%;
-  height: 26px;
-  border: 1px solid var(--border-gray);
-  border-radius: 6px;
-  padding: 0 10px;
-  font-size: 12px;
-  line-height: 1;
-}
-.image-upload-field {
-  margin-top: 47px;
-}
-.image-upload-field .field-label,
-.edit-image-field .field-label {
-  font-size: 12px;
-}
-
-.image-upload-field .file-select-box,
-.edit-image-field .file-select-box {
-  width: 100%;
-  margin-top: 0;
-}
-
-.image-upload-field .file-select-button,
-.edit-image-field .file-select-button {
-  width: 85px;
-}
-.initial-comment-field {
-  width: 325px;
-  margin: 37px auto 0;
-}
-.initial-comment-field .text-area {
-  width: 100%;
-  resize: none;
-  border: 1px solid var(--border-gray);
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1;
-}
-.product-form-card .initial-comment-field {
-  position: relative;
-  width: 100%;
-  height: 164px;
-}
-.product-form-card .initial-comment-field .field-label {
-  position: absolute;
-  top: 13px;
-  left: 9px;
-  z-index: 2;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 400;
-}
-.product-form-card .initial-comment-field .text-area {
-  height: 164px;
-  padding: 50px 18px 10px;
-}
-.product-form-card
-.initial-comment-field
-.text-area::placeholder,
-.comment-text-area::placeholder {
-  color: var(--muted-gray);
-  opacity: 1;
-}
-.form-action-row,
-.edit-action-row {
-  display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--mint-green);
+  color: var(--text-black);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
 }
-.form-action-row {
-  width: 377px;
+
+/*画面05・06共通：投稿詳細
+  同じ post_detail.html を所有者判定で使い分ける */
+
+.post-detail {
+  width: 402px;
+  max-width: 100%;
+  min-height: 874px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background: var(--background-yellow);
+  padding: 62px 14px 32px;
+}
+
+.owner-detail {
+  padding-top: 56px;
+}
+
+.detail-top-nav {
   height: 40px;
-  margin: 27px auto 0;
-  gap: 32px;
 }
-.cancel-button {
-  width: 108px;
-  height: 40px;
-}
-.submit-button,
-.edit-complete-button,
-.edit-action-row .danger-button {
+
+.detail-back-button {
+  display: inline-flex;
   width: 97px;
   height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--surface-gray);
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
 }
+
 .detail-summary-card {
-  position: relative;
   display: grid;
   width: 373px;
-  height: 230px;
-  margin: 0 auto;
-  background: var(--surface-gray);
-}
-.detail-page:not(:has(.owner-edit-form))
-.detail-summary-card {
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 14px;
-  padding: 27px 16px;
-}
-.detail-page:has(.owner-edit-form)
-.detail-summary-card {
+  max-width: 100%;
+  height: 214px;
+  margin: 15px auto 0;
   grid-template-columns: 132px minmax(0, 1fr);
   gap: 12px;
-  padding: 16px 8px;
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 16px 10px;
 }
+
+.owner-detail .detail-summary-card {
+  margin-top: 9px;
+}
+
 .detail-product-image {
-  width: 100%;
+  width: 132px;
+  height: 100px;
   object-fit: cover;
 }
-.detail-page:not(:has(.owner-edit-form))
-.detail-product-image {
-  height: 163px;
-}
-.detail-page:has(.owner-edit-form)
-.detail-product-image {
-  height: 110px;
-}
+
 .detail-information {
-  display: flex;
-  flex-direction: column;
+  min-width: 0;
   padding-top: 2px;
 }
-.detail-page:has(.owner-edit-form)
-.detail-information {
-  padding-top: 11px;
-}
+
 .detail-poster-name,
-.detail-summary-card .store-name {
+.detail-product-name,
+.detail-store-name,
+.detail-metric-item dt,
+.detail-metric-item dd {
+  margin: 0;
+}
+
+.detail-poster-name {
   font-size: 12px;
 }
+
 .detail-product-name {
-  margin-top: 12px;
+  overflow: hidden;
+  margin-top: 10px;
   font-size: 14px;
-}
-.detail-summary-card .store-name {
-  margin-top: 15px;
-}
-.detail-metric-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px 14px;
-  margin: 15px 0 0;
-}
-.detail-metric-item {
-  width: auto;
-  height: 41px;
-  border: 1px solid var(--border-gray);
-  background: var(--surface-gray);
-  padding: 4px 10px;
-}
-.detail-metric-item:nth-child(-n + 2) {
-  border: 0;
-  background: var(--soft-yellow);
-}
-.detail-metric-item dd {
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.detail-metric-item dd span {
-  margin-left: 4px;
+
+.detail-store-name {
+  margin-top: 13px;
+  font-size: 12px;
 }
-.owner-edit-form {
-  position: relative;
-  width: 360px;
-  margin: 8px auto 0;
-}
-.owner-edit-card {
-  display: flex;
-  flex-direction: column;
-}
-.owner-edit-card .detail-form-grid {
-  gap: 12px 28px;
-}
-.edit-image-field {
-  margin-top: 10px;
-}
-.owner-edit-card .initial-comment-field {
-  width: 100%;
-  row-gap: 0;
-  margin-top: 16px;
-}
-.owner-edit-card .initial-comment-field
-.field-label {
-  margin: 0;
-  font-size: 14px;
-}
-.owner-edit-card .initial-comment-field
-.text-area {
-  height: 101px;
-  margin-top: 7px;
-  background: var(--surface-gray);
-  padding: 8px;
-}
-.edit-action-row {
-  justify-content: space-between;
-  margin: 16px 12px 0;
-}
-.comment-area-card {
-  position: relative;
-  z-index: 1;
-  width: 373px;
-  margin-right: auto;
-  margin-left: auto;
-  border-radius: 8px;
-  background: var(--surface-gray);
-  padding: 14px 24px;
-}
-.other-comment-area {
-  min-height: 474px;
-  margin-top: 25px;
-  margin-bottom: 32px;
-  padding-top: 25px;
-}
-.owner-comment-area {
-  min-height: 115px;
-  margin-top: 16px;
-  margin-bottom: 32px;
-  padding-left: 6.5px;
-  padding-right: 6.5px;
-}
-.comment-form-card {
-  width: 325px;
-  margin: 0 auto;
-}
-.section-heading {
-  margin: 0;
-  font-size: 14px;
-}
-.comment-text-area {
-  width: 100%;
-  height: 158px;
-  margin-top: 10px;
-  resize: none;
-  border: 1px solid var(--border-gray);
-  border-radius: 8px;
-  background: var(--surface-gray);
-  padding: 47px 18px 10px;
-  font-size: 14px;
-  line-height: 1;
-}
-.comment-submit-button {
-  display: flex;
-  width: 190px;
-  height: 40px;
-  margin: 26px auto 0;
-}
-.comment-list {
+
+.detail-metric-grid {
   display: grid;
-  width: 325px;
-  margin: 38px auto 0;
-  row-gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 15px;
+  margin: 11px 0 0;
 }
-.owner-comment-area .comment-list {
-  width: 100%;
-  margin-top: 0;
-}
-.comment-card {
+
+.detail-metric-item {
   display: grid;
-  align-content: start;
-  width: 100%;
   min-width: 0;
-  min-height: 87px;
+  height: 39px;
+  align-content: center;
   border: 1px solid var(--border-gray);
   border-radius: 8px;
-  background: var(--surface-gray);
-  padding: 6px 10px 10px;
+  background: var(--card-white);
+  padding: 4px 10px;
 }
-.detail-page:not(:has(.owner-edit-form)) .comment-card {
-  min-height: 143px;
+
+.detail-metric-highlight {
+  border-color: transparent;
+  background: var(--soft-yellow);
 }
-.comment-user-name,
-.comment-body,
-.comment-time {
-  margin: 0;
-}
-.comment-user-name,
-.comment-time {
+
+.detail-metric-item dt {
   font-size: 10px;
   font-weight: 700;
 }
-.comment-time {
-  margin-top: 9px;
-  color: var(--muted-gray);
+
+.detail-metric-item dd {
+  margin-top: 3px;
+  font-size: 14px;
+  white-space: nowrap;
 }
-.comment-body {
+
+.detail-metric-item dd span {
+  margin-left: 7px;
+}
+
+/* 画面06：自ユーザー投稿詳細 */
+
+.owner-edit-form {
+  width: 360px;
+  max-width: calc(100% - 14px);
+  margin: 9px auto 0;
+}
+
+.detail-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 28px;
+}
+
+.detail-full-row {
+  grid-column: 1 / -1;
+}
+
+.detail-form-field,
+.detail-image-field,
+.detail-comment-edit-field {
+  display: grid;
   min-width: 0;
+  row-gap: 4px;
+}
+
+.detail-form-field label,
+.detail-image-field label,
+.detail-comment-edit-field label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.detail-form-field input,
+.detail-form-field select {
+  width: 100%;
+  height: 26px;
+  min-width: 0;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  background: var(--card-white);
+  padding: 0 8px;
+  color: var(--text-black);
+  font-size: 12px;
+}
+
+.detail-image-field {
+  margin-top: 10px;
+}
+
+.detail-image-field input[type="file"] {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  background: var(--card-white);
+  color: var(--text-black);
+  font-size: 10px;
+}
+
+.detail-image-field input[type="file"]::file-selector-button {
+  height: 22px;
+  margin: 3px 8px 3px 3px;
+  border: 1px solid var(--text-black);
+  background: var(--file-button-gray);
+  font-size: 10px;
+}
+
+.detail-comment-edit-field {
   margin-top: 13px;
+  row-gap: 7px;
+}
+
+.detail-comment-edit-field label {
+  margin-left: 14px;
+  font-size: 14px;
+}
+
+.detail-comment-edit-field textarea {
+  width: 302px;
+  max-width: calc(100% - 26px);
+  height: 94px;
+  margin: 0 auto;
+  resize: none;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 8px;
+  color: var(--text-black);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.detail-edit-actions {
+  display: flex;
+  margin: 15px 12px 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-edit-complete-button,
+.detail-delete-button,
+.detail-comment-submit {
+  display: inline-flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 20px;
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.detail-edit-complete-button,
+.detail-delete-button {
+  width: 97px;
+}
+
+.detail-edit-complete-button {
+  background: var(--mint-green);
+}
+
+.detail-delete-button {
+  background: var(--danger-red);
+}
+
+.owner-comments {
+  width: 302px;
+  margin: 17px auto 0;
+}
+
+.owner-comments .detail-comment-list {
+  width: 100%;
+}
+
+.owner-comments .detail-comment-card {
+  min-height: 80px;
+}
+
+/* 画面05：他ユーザー投稿詳細 */
+
+.other-comments {
+  width: 373px;
+  max-width: 100%;
+  min-height: 440px;
+  margin: 24px auto 0;
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 23px 23px 18px;
+}
+
+.detail-comment-form {
+  width: 325px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.detail-comment-form h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.detail-comment-form textarea {
+  width: 100%;
+  height: 148px;
+  margin-top: 10px;
+  resize: none;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 64px 18px 10px;
+  color: var(--text-black);
   font-size: 14px;
   line-height: 1.25;
+}
+
+.detail-comment-form textarea::placeholder,
+.detail-comment-edit-field textarea::placeholder {
+  color: var(--muted-gray);
+  opacity: 1;
+}
+
+.detail-comment-submit {
+  display: flex;
+  width: 190px;
+  margin: 23px auto 0;
+  background: var(--mint-green);
+}
+
+.detail-comment-list {
+  display: grid;
+  width: 325px;
+  max-width: 100%;
+  margin: 38px auto 0;
+  row-gap: 10px;
+}
+
+.detail-comment-card {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 143px;
+  align-content: start;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 7px 10px 10px;
+}
+
+.detail-comment-user,
+.detail-comment-time,
+.detail-comment-body {
+  margin: 0;
+}
+
+.detail-comment-user,
+.detail-comment-time {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.detail-comment-time {
+  margin-top: 8px;
+  color: var(--muted-gray);
+}
+
+.detail-comment-body {
+  min-width: 0;
+  margin-top: 11px;
+  font-size: 14px;
+  line-height: 1.2;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-.empty-comment-message {
-  width: 100%;
+
+.detail-empty-comments {
+  margin: 0;
+  border: 1px solid var(--border-gray);
   border-radius: 8px;
   background: var(--surface-gray);
   padding: 16px;
+  font-size: 13px;
   text-align: center;
+}
+
+@media (max-width: 401px) {
+  .page,
+  .post-detail {
+    width: 100%;
+  }
+
+  .post-card,
+  .post-list-actions,
+  .flash-messages,
+  .detail-summary-card,
+  .other-comments {
+    max-width: calc(100% - 28px);
+  }
 }

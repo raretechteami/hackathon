@@ -1,35 +1,40 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}投稿詳細 | おやつサポート{% endblock %}
+{% block title %}投稿詳細画面{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="/static/css/posts.css">
-{% endblock %}
-
-{% block header %}
-<header class="detail-page-header">
-  <a class="back-button" href="{{ url_for('posts_view') }}">一覧に戻る</a>
-</header>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="detail-page">
-  <section class="detail-summary-card">
-    <img class="detail-product-image" src="/{{ post.image_path }}" alt="{{ post.product_name }}の商品画像">
+{% set is_owner = post.user_id == user_id %}
+{% set image_filename = post.image_path|replace('./static/', '')|replace('static/', '') %}
+
+<main class="post-detail {% if is_owner %}owner-detail{% else %}other-detail{% endif %}">
+  <div class="detail-top-nav">
+    <a class="detail-back-button" href="{{ url_for('posts_view') }}">一覧に戻る</a>
+  </div>
+
+  <section class="detail-summary-card" aria-label="投稿の商品情報">
+    <img
+      class="detail-product-image"
+      src="{{ url_for('static', filename=image_filename) }}"
+      alt="{{ post.product_name }}の商品画像"
+    >
 
     <div class="detail-information">
       <p class="detail-poster-name">{{ post.user_name }}</p>
       <h1 class="detail-product-name">{{ post.product_name }}</h1>
-      <p class="store-name">{{ post.store_name }}</p>
+      <p class="detail-store-name">{{ post.store_name }}</p>
 
       <dl class="detail-metric-grid">
-        <div class="detail-metric-item">
+        <div class="detail-metric-item detail-metric-highlight">
           <dt>カロリー</dt>
-          <dd>{{ '%.1f'|format(post.calories_kcal) }} <span>kcal</span></dd>
+          <dd>{{ post.calories_kcal }} <span>kcal</span></dd>
         </div>
-        <div class="detail-metric-item">
+        <div class="detail-metric-item detail-metric-highlight">
           <dt>糖分</dt>
-          <dd>{{ '%.1f'|format(post.sugar_g) }} <span>g</span></dd>
+          <dd>{{ post.sugar_g }} <span>g</span></dd>
         </div>
         <div class="detail-metric-item">
           <dt>価格</dt>
@@ -37,128 +42,173 @@
         </div>
         <div class="detail-metric-item">
           <dt>コメント</dt>
-          <dd>{{ post.comment_count }}</dd>
+          <dd>{{ comments|length }}</dd>
         </div>
       </dl>
     </div>
   </section>
 
   {% if is_owner %}
-    <form id="owner-edit-form" class="owner-edit-form" action="{{ url_for('update_post', post_id=post.id) }}" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <form
+    id="owner-edit-form"
+    class="owner-edit-form"
+    action="{{ url_for('update_post', post_id=post.id) }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-      <section class="owner-edit-card">
-        <div class="detail-form-grid">
-          <label class="form-field full-row-field">
-            <span class="field-label">商品名</span>
-            <input class="text-input" type="text" name="product_name" value="{{ post.product_name }}" maxlength="120" required>
-          </label>
-
-          <label class="form-field">
-            <span class="field-label">店舗</span>
-            <select class="text-input" name="store_id" required>
-              {% for store in stores %}
-                <option value="{{ store.id }}" {% if store.id == post.store_id %}selected{% endif %}>{{ store.name }}</option>
-              {% endfor %}
-            </select>
-          </label>
-
-          <label class="form-field">
-            <span class="field-label">価格（円）</span>
-            <input class="text-input" type="number" name="price_yen" value="{{ post.price_yen }}" min="0" step="1" required>
-          </label>
-
-          <label class="form-field">
-            <span class="field-label">カロリー（kcal）</span>
-            <input class="text-input" type="number" name="calories_kcal" value="{{ post.calories_kcal }}" min="0" max="9999.9" step="0.1" required>
-          </label>
-
-          <label class="form-field">
-            <span class="field-label">糖分（g）</span>
-            <input class="text-input" type="number" name="sugar_g" value="{{ post.sugar_g }}" min="0" max="9999.9" step="0.1" required>
-          </label>
-        </div>
-
-        <div class="form-field edit-image-field">
-          <span class="field-label">商品画像</span>
-          <label class="file-select-box" for="owner-post-image-input">
-            <span class="file-select-button">ファイルを選択</span>
-            <span class="file-select-name" data-default-text="選択されていません">選択されていません</span>
-          </label>
-          <input id="owner-post-image-input" class="visually-hidden-file-input" type="file" name="product_image" accept="image/png,image/jpeg,image/gif,image/webp">
-        </div>
-
-        <label class="form-field initial-comment-field">
-          <span class="field-label">コメント</span>
-          <textarea class="text-area" name="content" rows="7" placeholder="コメントを入力・・・" required>{{ post.content }}</textarea>
-        </label>
-
-        <div class="edit-action-row">
-          <button class="primary-button edit-complete-button" type="submit">編集完了</button>
-          <button class="danger-button" type="submit" form="delete-post-form" onclick="return confirm('この投稿を削除しますか？');">削除</button>
-        </div>
-      </section>
-    </form>
-
-    <form id="delete-post-form" hidden action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    </form>
-
-    <section class="comment-area-card owner-comment-area" aria-label="投稿されたコメント">
-      <div class="comment-list">
-        {% if comments %}
-          {% for comment in comments %}
-            <article class="comment-card">
-              <p class="comment-user-name">{{ comment.user_name }}</p>
-              <time class="comment-time">{{ comment.created_at }}</time>
-              <p class="comment-body">{{ comment.content }}</p>
-            </article>
-          {% endfor %}
-        {% else %}
-          <p class="empty-comment-message">まだコメントはありません。</p>
-        {% endif %}
+    <div class="detail-form-grid">
+      <div class="detail-form-field detail-full-row">
+        <label for="product_name">商品名</label>
+        <input
+          id="product_name"
+          type="text"
+          name="product_name"
+          value="{{ post.product_name }}"
+          maxlength="120"
+          required
+        >
       </div>
-    </section>
+
+      <div class="detail-form-field">
+        <label for="store_id">店舗</label>
+        <select id="store_id" name="store_id" required>
+          {% for store in stores %}
+          <option value="{{ store.id }}" {% if store.id == post.store_id %}selected{% endif %}>
+            {{ store.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="detail-form-field">
+        <label for="price_yen">価格（円）</label>
+        <input
+          id="price_yen"
+          type="number"
+          name="price_yen"
+          value="{{ post.price_yen }}"
+          min="0"
+          step="1"
+          required
+        >
+      </div>
+
+      <div class="detail-form-field">
+        <label for="calories_kcal">カロリー（kcal）</label>
+        <input
+          id="calories_kcal"
+          type="number"
+          name="calories_kcal"
+          value="{{ post.calories_kcal }}"
+          min="0"
+          step="0.1"
+          required
+        >
+      </div>
+
+      <div class="detail-form-field">
+        <label for="sugar_g">糖分（g）</label>
+        <input
+          id="sugar_g"
+          type="number"
+          name="sugar_g"
+          value="{{ post.sugar_g }}"
+          min="0"
+          step="0.1"
+          required
+        >
+      </div>
+    </div>
+
+    <div class="detail-image-field">
+      <label for="image">商品画像</label>
+      <input
+        id="image"
+        type="file"
+        name="image"
+        accept="image/png,image/jpeg,image/gif"
+      >
+    </div>
+
+    <div class="detail-comment-edit-field">
+      <label for="content">コメント</label>
+      <textarea
+        id="content"
+        name="content"
+        rows="5"
+        placeholder="コメントを入力・・・"
+        required
+      >{{ post.content }}</textarea>
+    </div>
+
+    <div class="detail-edit-actions">
+      <button class="detail-edit-complete-button" type="submit">編集完了</button>
+      <button
+        class="detail-delete-button"
+        type="submit"
+        form="delete-post-form"
+        onclick="return confirm('この投稿を削除しますか？');"
+      >削除</button>
+    </div>
+  </form>
+
+  <form
+    id="delete-post-form"
+    action="{{ url_for('delete_post', post_id=post.id) }}"
+    method="post"
+    hidden
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  </form>
+
+  <section class="detail-comments owner-comments" aria-label="投稿されたコメント">
+    <div class="detail-comment-list">
+      {% if comments %}
+        {% for comment in comments %}
+        <article class="detail-comment-card">
+          <p class="detail-comment-user">{{ comment.user_name }}</p>
+          <time class="detail-comment-time">{{ comment.created_at }}</time>
+          <p class="detail-comment-body">{{ comment.content }}</p>
+        </article>
+        {% endfor %}
+      {% else %}
+        <p class="detail-empty-comments">まだコメントはありません。</p>
+      {% endif %}
+    </div>
+  </section>
+
   {% else %}
-    <section class="comment-area-card other-comment-area">
-      <div class="comment-form-card" aria-labelledby="comment-form-heading">
-        <h2 id="comment-form-heading" class="section-heading">コメント</h2>
-        <form action="{{ url_for('create_comment', post_id=post.id) }}" method="post">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <textarea class="text-area comment-text-area" name="content" rows="6" placeholder="コメントを入力・・・" required></textarea>
-          <button class="primary-button comment-submit-button" type="submit">コメントする</button>
-        </form>
-      </div>
+  <section class="detail-comments other-comments">
+    <div class="detail-comment-form" aria-labelledby="comment-heading">
+      <h2 id="comment-heading">コメント</h2>
+      <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea
+          name="comment_text"
+          rows="6"
+          placeholder="コメントを入力・・・"
+          required
+        ></textarea>
+        <button class="detail-comment-submit" type="submit">コメントする</button>
+      </form>
+    </div>
 
-      <div class="comment-list" aria-label="投稿されたコメント">
-        {% if comments %}
-          {% for comment in comments %}
-            <article class="comment-card">
-              <p class="comment-user-name">{{ comment.user_name }}</p>
-              <time class="comment-time">{{ comment.created_at }}</time>
-              <p class="comment-body">{{ comment.content }}</p>
-            </article>
-          {% endfor %}
-        {% else %}
-          <p class="empty-comment-message">まだコメントはありません。</p>
-        {% endif %}
-      </div>
-    </section>
+    <div class="detail-comment-list" aria-label="投稿されたコメント">
+      {% if comments %}
+        {% for comment in comments %}
+        <article class="detail-comment-card">
+          <p class="detail-comment-user">{{ comment.user_name }}</p>
+          <time class="detail-comment-time">{{ comment.created_at }}</time>
+          <p class="detail-comment-body">{{ comment.content }}</p>
+        </article>
+        {% endfor %}
+      {% else %}
+        <p class="detail-empty-comments">まだコメントはありません。</p>
+      {% endif %}
+    </div>
+  </section>
   {% endif %}
 </main>
-{% endblock %}
-
-{% block page_scripts %}
-<script>
-  (() => {
-    const fileInput = document.getElementById('owner-post-image-input');
-    const fileName = document.querySelector('.owner-edit-card .file-select-name');
-    if (!fileInput || !fileName) return;
-    fileInput.addEventListener('change', () => {
-      fileName.textContent = fileInput.files.length > 0
-        ? fileInput.files[0].name
-        : fileName.dataset.defaultText;
-    });
-  })();
-</script>
 {% endblock %}
