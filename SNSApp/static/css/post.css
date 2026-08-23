@@ -50,11 +50,24 @@ header {
 }
 
 .post-list-actions {
-  text-align: right;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 15px;
+  margin: 0 0 23px;
   font-family: Inter, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  margin-bottom: -10px;
+  line-height: 17px;
+  text-align: right;
+  text-decoration: none;
+}
+
+.post-list-actions .action-separator {
+  margin: 0 4px;
+  color: #000000;
 }
 
 .edit {
