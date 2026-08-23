@@ -24,6 +24,7 @@ app.permanent_session_lifetime = timedelta(days=SESSION_DAYS)
 csrf = CSRFProtect(app)
 
 UPLOAD_FOLDER = './static/uploads/'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
@@ -52,15 +53,16 @@ def sign_up_view():
 
 
 # サインアップ処理
+# サインアップ処理
 @app.route('/userRegist', methods=['POST'])
 def signup_process():
-    name = request.form.get('name', '').strip()
+    nickname = request.form.get('nickname', '').strip()
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '').strip()
     password_confirm = request.form.get('password_confirm', '').strip()
 
-    # 空チェック
-    if not name or not email or not password or not password_confirm:
+    # 未入力チェック
+    if not nickname or not email or not password or not password_confirm:
         flash("すべての項目を入力してください。", "error")
         return redirect(url_for('sign_up_view'))
     
@@ -83,12 +85,11 @@ def signup_process():
     # パスワードのハッシュ化
     hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
-    # Userのcreateメソッドを呼び出してユーザーを作成し、user_idを取得
-    user_id = User.create(name, email, hashed_password)
+    # User 作成
+    user_id = User.create(nickname, email, hashed_password)
 
-    # セッションにuser_idをキー名user_idで保存
+    # ログイン状態にしてリダイレクト
     session['user_id'] = user_id
-
     return redirect(url_for('posts_view'))
 
 
@@ -132,7 +133,7 @@ def login_process():
 
 
 # ログアウト
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET','POST'])
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
@@ -159,6 +160,15 @@ def posts_view():
 
 
 # 投稿処理
+# 新規投稿画面の表示
+@app.route('/posts/newPost', methods=['GET'])
+def new_post_view():
+    user_id = session.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+    
+    stores = ConvenienceStore.get_all()
+    return render_template('post/new_post.html', stores=stores, user_id=user_id)
 
 @app.route('/posts', methods=['POST'])
 def create_post():
@@ -174,49 +184,39 @@ def create_post():
     price_yen = request.form.get('price_yen', '').strip()
     content = request.form.get('content', '').strip()
     if product_name == '':
-        flash('商品名が空です','error')
-        return redirect(url_for('posts_view'))
+        flash('商品名が空です', 'error')
+        return redirect(url_for('new_post_view'))
     if store_id == '':
-        flash('店舗名が空です','error')
-        return redirect(url_for('posts_view'))
+        flash('店舗名が空です', 'error')
+        return redirect(url_for('new_post_view'))
     if calories_kcal == '':
-            flash('カロリーが空です','error')
-            return redirect(url_for('posts_view'))
+        flash('カロリーが空です', 'error')
+        return redirect(url_for('new_post_view'))
     if sugar_g == '':
-        flash('糖質が空です','error')
-        return redirect(url_for('posts_view'))
+        flash('糖質が空です', 'error')
+        return redirect(url_for('new_post_view'))
     if price_yen == '':
-        flash('価格が空です','error')
-        return redirect(url_for('posts_view'))
+        flash('価格が空です', 'error')
+        return redirect(url_for('new_post_view'))
     if content == '':
-        flash('投稿内容が空です','error')
-        return redirect(url_for('posts_view'))
-    file = request.files['file']
-    if (not file):
-        flash('画像ファイルがありません','error')
-        return redirect(url_for('posts_view'))
+        flash('投稿内容が空です', 'error')
+        return redirect(url_for('new_post_view'))
+    
+    file = request.files.get('file')
+    if not file or file.filename == '':
+        flash('画像ファイルがありません', 'error')
+        return redirect(url_for('new_post_view'))
     if allowed_file(file.filename):
             unique_id = uuid.uuid4().hex[:6]
             image_name =  unique_id + str(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER,image_name))
-            image_path = UPLOAD_FOLDER + image_name
+            image_path = 'uploads/' + image_name
     else:
         flash('画像ファイルを選んでください','error')
-        return redirect(url_for('posts_view'))
+        return redirect(url_for('new_post_view'))
     Post.create(user_id,product_name,store_id,calories_kcal,sugar_g,price_yen,image_path,content)
     flash('投稿が完了しました','success')
     return redirect(url_for('posts_view'))
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -235,19 +235,37 @@ def post_detail_view(post_id):
     post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M')
     
     stores = ConvenienceStore.get_all()
-   
     store_dict = {store['id']: store['name'] for store in stores}
     post['store_name'] = store_dict.get(post['store_id'], '')
 
     comments = Comment.get_by_post_id(post_id)
+    for c in comments:
+        if c.get('created_at'):
+            c['created_at'] = c['created_at'].strftime('%Y-%m-%d %H:%M')
 
+    # デバッグ出力（ターミナルで値と型を確認）
+    print(f"[DEBUG] ログイン中のID: {user_id} (型: {type(user_id)}), 投稿者のID: {post['user_id']} (型: {type(post['user_id'])})")
+
+    # int型にキャストして確実に一致判定
+    if int(post['user_id']) == int(user_id):
+        print("[DEBUG] -> 自ユーザー詳細画面を表示")
+        return render_template(
+            'post/post_detail.html',
+            post=post,
+            stores=stores,
+            comments=comments,
+            user_id=user_id
+        )
+
+    print("[DEBUG] -> 他ユーザー詳細画面を表示")
     return render_template(
-        'post/post_detail.html',
+        'post/follow_post_detail.html',
         post=post,
         stores=stores,
         comments=comments,
         user_id=user_id
     )
+
 
 # 編集内容の保存処理
 @app.route('/posts/<int:post_id>', methods=['POST'])
@@ -278,8 +296,11 @@ def update_post(post_id):
 
     image_file = request.files.get('image')
     image_path = post['image_path']
-    if image_file and image_file.filename != '':
-        image_path = Post.save_image(image_file)
+    if image_file and image_file.filename != '' and allowed_file(image_file.filename):
+        unique_id = uuid.uuid4().hex[:6]
+        image_name = unique_id + str(image_file.filename)
+        image_file.save(os.path.join(UPLOAD_FOLDER, image_name))
+        image_path = 'uploads/' + image_name
     
     Post.update(
         post_id=post_id,
@@ -344,10 +365,10 @@ def delete_post(post_id):
 
 
 # エラーハンドリング
+# エラーハンドリング
 @app.errorhandler(400)
 def bad_request(error):
     return render_template('error/400.html'), 400
-
 
 @app.errorhandler(403)
 def admin_error(error):
@@ -360,8 +381,6 @@ def page_not_found(error):
 @app.errorhandler(500)
 def server_error(error):
     return render_template('error/500.html'), 500
-
-
 
 
 if __name__ == '__main__':
