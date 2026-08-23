@@ -1,210 +1,164 @@
+{% extends 'base.html' %}
 
-{% extends "base.html" %}
-
-{% block title %}自ユーザー投稿詳細画面{% endblock %}
+{% block title %}投稿詳細 | おやつサポート{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/post_detail.css') }}">
+<link rel="stylesheet" href="/static/css/posts.css">
+{% endblock %}
+
+{% block header %}
+<header class="detail-page-header">
+  <a class="back-button" href="{{ url_for('posts_view') }}">一覧に戻る</a>
+</header>
 {% endblock %}
 
 {% block content %}
+<main class="detail-page">
+  <section class="detail-summary-card">
+    <img class="detail-product-image" src="/{{ post.image_path }}" alt="{{ post.product_name }}の商品画像">
 
-<main class="post-detail">
+    <div class="detail-information">
+      <p class="detail-poster-name">{{ post.user_name }}</p>
+      <h1 class="detail-product-name">{{ post.product_name }}</h1>
+      <p class="store-name">{{ post.store_name }}</p>
 
-    <!-- 一覧に戻る -->
-    <div class="top-nav">
-        <button type="button" onclick="location.href='/posts'" class="btn-back">
-            一覧に戻る
-        </button>
-    </div>
-
-    <!-- 投稿概要 -->
-     <div class="post-summary">
-
-         <!-- 商品画像 -->
-        <div class="post-summary-image">
-            <img src="{{ url_for('static', filename=post.image_path) }}" alt="商品画像">
-     </div>
-        <!-- ニックネーム -->
-         <p class="summary-nickname">
-            {{ post.user_name }}
-        </p>
-
-         <!-- 商品名 -->
-        <p class="summary-product-name">
-            {{ post.product_name }}
-        </p>
-
-        <!-- 店舗 ここ怪しい-->
-         <p class="summary-store">
-            {{ post.store_id }}
-        </p>
-        
-        <!-- カロリー・糖分 -->
-         <div class="summary-nutrition">
-
-            <div class="summary-calories">
-                <span>カロリー</span>
-                <span>{{ post.calories_kcal }} kcal</span>
-            </div>
-        
-            <div class="summary-sugar">
-                <span>糖分</span>
-                <span>{{ post.sugar_g }} g</span>
-            </div>
-        
-         </div>
-
-        <!-- 価格・コメント数 -->
-         <div class="summary-info">
-
-            <div class="summary-price">
-                <span>価格</span>
-                <span>{{ post.price_yen }} 円</span>
-            </div>
-        
-            <div class="summary-comments">
-                <span>コメント</span>
-                <span>{{ comments|length }}</span>
-            </div>      
-
-         </div>
-
-     </div>
-
-<form method="POST" enctype="multipart/form-data">
-
-    <!-- 商品名 -->
-    <div class="form-group">
-
-        <label for="product_name">商品名</label>
-        <input
-            type="text"
-            id="product_name"
-            name="product_name"
-            value="{{ post.product_name }}"
-        >
-    </div>
-
-    <!-- 店舗 -->
-     <div class="form-group">
-
-        <label for="store_id">店舗</label>
-        <select id="store_id" name="store_id">
-            <option value="">▼ 選択してください</option>
-            
-            {% for store in stores %}
-                <option value="{{ store.id }}"
-                     {% if store.id == post.store_id %}selected{% endif %}>
-                    {{ store.name }}
-                </option>
-            {% endfor %}
-
-        </select>
-    </div>
-
-    <!-- 価格 -->
-    <div class="form-group">
-
-        <label for="price_yen">価格（円）</label>
-
-        <input
-            type="number"
-            id="price_yen"
-            name="price_yen"
-            value="{{ post.price_yen }}"
-        >
-
-    </div>
-
-    <!-- カロリー・糖分 -->
-    <div class="form-group">
-
-        <label for="calories_kcal">カロリー (kcal) </label>
-        <input
-            type="number"
-            id="calories_kcal"
-            name="calories_kcal"
-            value="{{ post.calories_kcal }}"
-        > 
-    </div>   
-
-    <div class="form-group">
-
-        <label for="sugar_g">糖分 (g) </label>
-        <input
-            type="number"
-            id="sugar_g"
-            name="sugar_g"
-            step="0.1"
-            value="{{ post.sugar_g }}"
-        >
-    </div>
-
-    <!-- 商品画像 -->
-    <div class="form-group">
-        <label for="image">商品画像</label>
-        <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-        >
-    </div>
-
-    <!-- コメント -->
-    <div class="form-group">
-        <label for="content">コメント</label>
-
-        <textarea
-            id="content"
-            name="content"
-            >{{ post.content }}</textarea>
-    </div>
-
-    <!-- 編集完了 -->
-    <div class="form-buttons">
-
-        <button type="submit" class="edit-button">
-            編集完了
-        </button>
-
-    </div> 
-
-</form>
-
-    <!-- 削除 -->
-    <div class="delete-button-area">
-
-        <button type="button" class="delete-button">
-            削除
-        </button>
-
-    </div>
-
-    <!-- コメント一覧 -->
-    <div class="comment-list">
-
-        {% for comment in comments %}
-
-        <div class="comment-item">
-            <!-- ニックネーム -->
-             <p class="comment-user-name">
-              {{ comment.user_name }}
-             </p>
-
-            <!-- 投稿日時 -->
-             <p class="comment-date">
-                {{ comment.created_at }}
-             </p>
-
-            <!-- コメント本文 -->
-             <p class="comment-content">
-                 {{ comment.content }}
-             </p>
+      <dl class="detail-metric-grid">
+        <div class="detail-metric-item">
+          <dt>カロリー</dt>
+          <dd>{{ '%.1f'|format(post.calories_kcal) }} <span>kcal</span></dd>
         </div>
-    {% endfor %}
+        <div class="detail-metric-item">
+          <dt>糖分</dt>
+          <dd>{{ '%.1f'|format(post.sugar_g) }} <span>g</span></dd>
+        </div>
+        <div class="detail-metric-item">
+          <dt>価格</dt>
+          <dd>{{ post.price_yen }} <span>円</span></dd>
+        </div>
+        <div class="detail-metric-item">
+          <dt>コメント</dt>
+          <dd>{{ post.comment_count }}</dd>
+        </div>
+      </dl>
     </div>
+  </section>
+
+  {% if is_owner %}
+    <form id="owner-edit-form" class="owner-edit-form" action="{{ url_for('update_post', post_id=post.id) }}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <section class="owner-edit-card">
+        <div class="detail-form-grid">
+          <label class="form-field full-row-field">
+            <span class="field-label">商品名</span>
+            <input class="text-input" type="text" name="product_name" value="{{ post.product_name }}" maxlength="120" required>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">店舗</span>
+            <select class="text-input" name="store_id" required>
+              {% for store in stores %}
+                <option value="{{ store.id }}" {% if store.id == post.store_id %}selected{% endif %}>{{ store.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">価格（円）</span>
+            <input class="text-input" type="number" name="price_yen" value="{{ post.price_yen }}" min="0" step="1" required>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">カロリー（kcal）</span>
+            <input class="text-input" type="number" name="calories_kcal" value="{{ post.calories_kcal }}" min="0" max="9999.9" step="0.1" required>
+          </label>
+
+          <label class="form-field">
+            <span class="field-label">糖分（g）</span>
+            <input class="text-input" type="number" name="sugar_g" value="{{ post.sugar_g }}" min="0" max="9999.9" step="0.1" required>
+          </label>
+        </div>
+
+        <div class="form-field edit-image-field">
+          <span class="field-label">商品画像</span>
+          <label class="file-select-box" for="owner-post-image-input">
+            <span class="file-select-button">ファイルを選択</span>
+            <span class="file-select-name" data-default-text="選択されていません">選択されていません</span>
+          </label>
+          <input id="owner-post-image-input" class="visually-hidden-file-input" type="file" name="product_image" accept="image/png,image/jpeg,image/gif,image/webp">
+        </div>
+
+        <label class="form-field initial-comment-field">
+          <span class="field-label">コメント</span>
+          <textarea class="text-area" name="content" rows="7" placeholder="コメントを入力・・・" required>{{ post.content }}</textarea>
+        </label>
+
+        <div class="edit-action-row">
+          <button class="primary-button edit-complete-button" type="submit">編集完了</button>
+          <button class="danger-button" type="submit" form="delete-post-form" onclick="return confirm('この投稿を削除しますか？');">削除</button>
+        </div>
+      </section>
+    </form>
+
+    <form id="delete-post-form" hidden action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+
+    <section class="comment-area-card owner-comment-area" aria-label="投稿されたコメント">
+      <div class="comment-list">
+        {% if comments %}
+          {% for comment in comments %}
+            <article class="comment-card">
+              <p class="comment-user-name">{{ comment.user_name }}</p>
+              <time class="comment-time">{{ comment.created_at }}</time>
+              <p class="comment-body">{{ comment.content }}</p>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p class="empty-comment-message">まだコメントはありません。</p>
+        {% endif %}
+      </div>
+    </section>
+  {% else %}
+    <section class="comment-area-card other-comment-area">
+      <div class="comment-form-card" aria-labelledby="comment-form-heading">
+        <h2 id="comment-form-heading" class="section-heading">コメント</h2>
+        <form action="{{ url_for('create_comment', post_id=post.id) }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <textarea class="text-area comment-text-area" name="content" rows="6" placeholder="コメントを入力・・・" required></textarea>
+          <button class="primary-button comment-submit-button" type="submit">コメントする</button>
+        </form>
+      </div>
+
+      <div class="comment-list" aria-label="投稿されたコメント">
+        {% if comments %}
+          {% for comment in comments %}
+            <article class="comment-card">
+              <p class="comment-user-name">{{ comment.user_name }}</p>
+              <time class="comment-time">{{ comment.created_at }}</time>
+              <p class="comment-body">{{ comment.content }}</p>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p class="empty-comment-message">まだコメントはありません。</p>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
 </main>
+{% endblock %}
 
-
+{% block page_scripts %}
+<script>
+  (() => {
+    const fileInput = document.getElementById('owner-post-image-input');
+    const fileName = document.querySelector('.owner-edit-card .file-select-name');
+    if (!fileInput || !fileName) return;
+    fileInput.addEventListener('change', () => {
+      fileName.textContent = fileInput.files.length > 0
+        ? fileInput.files[0].name
+        : fileName.dataset.defaultText;
+    });
+  })();
+</script>
+{% endblock %}
