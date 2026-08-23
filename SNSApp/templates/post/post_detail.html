@@ -1,5 +1,4 @@
-
-{% extends "base.html" %}
+{% extends "auth/base.html" %}
 
 {% block title %}投稿詳細画面{% endblock %}
 
@@ -15,6 +14,17 @@
   <div class="detail-top-nav">
     <a class="detail-back-button" href="{{ url_for('posts_view') }}">一覧に戻る</a>
   </div>
+
+  <!-- フラッシュメッセージ（カード上部） -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
 
   <section class="detail-summary-card" aria-label="投稿の商品情報">
     <img
@@ -50,13 +60,15 @@
   </section>
 
   {% if is_owner %}
-  <form
+  <div class="detail-main-card">
+    <form
     id="owner-edit-form"
     class="owner-edit-form"
     action="{{ url_for('update_post', post_id=post.id) }}"
     method="post"
     enctype="multipart/form-data"
-  >
+    novalidate
+   >
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="detail-form-grid">
@@ -66,17 +78,19 @@
           id="product_name"
           type="text"
           name="product_name"
-          value="{{ post.product_name }}"
+          value="{{ form_data.product_name if form_data else post.product_name }}"
           maxlength="120"
-          required
         >
       </div>
 
       <div class="detail-form-field">
         <label for="store_id">店舗</label>
-        <select id="store_id" name="store_id" required>
+        <select id="store_id" name="store_id">
           {% for store in stores %}
-          <option value="{{ store.id }}" {% if store.id == post.store_id %}selected{% endif %}>
+          <option
+            value="{{ store.id }}"
+            {% if form_data and form_data.store_id == store.id|string %}selected{% elif not form_data and store.id == post.store_id %}selected{% endif %}
+          >
             {{ store.name }}
           </option>
           {% endfor %}
@@ -89,10 +103,9 @@
           id="price_yen"
           type="number"
           name="price_yen"
-          value="{{ post.price_yen }}"
+          value="{{ form_data.price_yen if form_data else post.price_yen }}"
           min="0"
           step="1"
-          required
         >
       </div>
 
@@ -102,10 +115,9 @@
           id="calories_kcal"
           type="number"
           name="calories_kcal"
-          value="{{ post.calories_kcal }}"
+          value="{{ form_data.calories_kcal if form_data else post.calories_kcal }}"
           min="0"
           step="0.1"
-          required
         >
       </div>
 
@@ -115,10 +127,9 @@
           id="sugar_g"
           type="number"
           name="sugar_g"
-          value="{{ post.sugar_g }}"
+          value="{{ form_data.sugar_g if form_data else post.sugar_g }}"
           min="0"
           step="0.1"
-          required
         >
       </div>
     </div>
@@ -140,8 +151,7 @@
         name="content"
         rows="5"
         placeholder="コメントを入力・・・"
-        required
-      >{{ post.content }}</textarea>
+      >{{ form_data.content if form_data else post.content }}</textarea>
     </div>
 
     <div class="detail-edit-actions">
@@ -179,6 +189,7 @@
       {% endif %}
     </div>
   </section>
+  </div>
 
   {% else %}
   <section class="detail-comments other-comments">
@@ -213,4 +224,3 @@
   {% endif %}
 </main>
 {% endblock %}
-

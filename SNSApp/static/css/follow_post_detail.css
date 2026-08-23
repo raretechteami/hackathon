@@ -1,6 +1,3 @@
-/* ====================================
-   基本全体レイアウト
-==================================== */
 body {
   background-color: #fde89b;
   margin: 0;
@@ -33,9 +30,6 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-/* ====================================
-     カード共通
-  ==================================== */
 .card {
   background: #ffffff;
   border-radius: 20px;
@@ -44,9 +38,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* ====================================
-     投稿詳細カード（上部）
-  ==================================== */
 .post-card-inner {
   display: flex;
   gap: 14px;
@@ -63,6 +54,7 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
+  object-fit: contain;
   justify-content: center;
 }
 
@@ -134,9 +126,6 @@ body {
   border: 1px solid #e5e5e5;
 }
 
-/* ====================================
-     コメントセクション（下部）
-  ==================================== */
 .comments-card .section-title {
   font-size: 15px;
   font-weight: bold;

@@ -183,29 +183,42 @@ def create_post():
     sugar_g= request.form.get('sugar_g', '').strip()
     price_yen = request.form.get('price_yen', '').strip()
     content = request.form.get('content', '').strip()
+
+    form_data={
+        'product_name': product_name,
+        'store_id':store_id,
+        'calories_kcal': calories_kcal,
+        'sugar_g': sugar_g,
+        'price_yen': price_yen,
+        'content': content
+    }
+
     if product_name == '':
         flash('商品名が空です', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
     if store_id == '':
         flash('店舗名が空です', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
     if calories_kcal == '':
         flash('カロリーが空です', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
     if sugar_g == '':
         flash('糖質が空です', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
     if price_yen == '':
         flash('価格が空です', 'error')
-        return redirect(url_for('new_post_view'))
-    if content == '':
-        flash('投稿内容が空です', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
     
     file = request.files.get('file')
     if not file or file.filename == '':
         flash('画像ファイルがありません', 'error')
-        return redirect(url_for('new_post_view'))
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
+
+    
+    if content == '':
+        flash('投稿内容が空です', 'error')
+        return render_template('post/new_post.html', stores=stores, user_id=user_id, form_data=form_data)
+
     if allowed_file(file.filename):
             unique_id = uuid.uuid4().hex[:6]
             image_name =  unique_id + str(file.filename)
@@ -243,12 +256,8 @@ def post_detail_view(post_id):
         if c.get('created_at'):
             c['created_at'] = c['created_at'].strftime('%Y-%m-%d %H:%M')
 
-    # デバッグ出力（ターミナルで値と型を確認）
-    print(f"[DEBUG] ログイン中のID: {user_id} (型: {type(user_id)}), 投稿者のID: {post['user_id']} (型: {type(post['user_id'])})")
 
-    # int型にキャストして確実に一致判定
     if int(post['user_id']) == int(user_id):
-        print("[DEBUG] -> 自ユーザー詳細画面を表示")
         return render_template(
             'post/post_detail.html',
             post=post,
@@ -257,7 +266,6 @@ def post_detail_view(post_id):
             user_id=user_id
         )
 
-    print("[DEBUG] -> 他ユーザー詳細画面を表示")
     return render_template(
         'post/follow_post_detail.html',
         post=post,
@@ -279,6 +287,12 @@ def update_post(post_id):
         flash('投稿の編集権限がありません。', 'error')
         return redirect(url_for('posts_view'))
     
+    stores = ConvenienceStore.get_all()
+    comments = Comment.get_by_post_id(post_id)
+    for c in comments:
+        if c.get('created_at'):
+            c['created_at'] = c['created_at'].strftime('%Y-%m-%d %H:%M')
+
     product_name = request.form.get('product_name', '').strip()
     store_id = request.form.get('store_id', '').strip()
     calories_kcal = request.form.get('calories_kcal', '').strip()
@@ -286,29 +300,54 @@ def update_post(post_id):
     price_yen = request.form.get('price_yen', '').strip()
     content = request.form.get('content', '').strip()
 
-   
-    product_name = product_name if product_name else post['product_name']
-    store_id = int(store_id) if store_id else post['store_id']
-    price_yen = int(price_yen) if price_yen else post['price_yen']
-    calories_kcal = float(calories_kcal) if calories_kcal else post['calories_kcal']
-    sugar_g = float(sugar_g) if sugar_g else post['sugar_g']
-    content = content if content else post['content']
+    form_data = {
+        'product_name': product_name,
+        'store_id': store_id,
+        'calories_kcal': calories_kcal,
+        'sugar_g': sugar_g,
+        'price_yen': price_yen,
+        'content': content
+    }
+
+    # 各フィールドの未入力バリデーション
+    if product_name == '':
+        flash('商品名が空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
+    if store_id == '':
+        flash('店舗名が空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
+    if calories_kcal == '':
+        flash('カロリーが空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
+    if sugar_g == '':
+        flash('糖質が空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
+    if price_yen == '':
+        flash('価格が空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
+    if content == '':
+        flash('投稿内容が空です', 'error')
+        return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
 
     image_file = request.files.get('image')
     image_path = post['image_path']
-    if image_file and image_file.filename != '' and allowed_file(image_file.filename):
-        unique_id = uuid.uuid4().hex[:6]
-        image_name = unique_id + str(image_file.filename)
-        image_file.save(os.path.join(UPLOAD_FOLDER, image_name))
-        image_path = 'uploads/' + image_name
+    if image_file and image_file.filename != '':
+        if allowed_file(image_file.filename):
+            unique_id = uuid.uuid4().hex[:6]
+            image_name = unique_id + str(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_name))
+            image_path = 'uploads/' + image_name
+        else:
+            flash('画像ファイルを選んでください', 'error')
+            return render_template('post/post_detail.html', post=post, stores=stores, comments=comments, user_id=user_id, form_data=form_data)
     
     Post.update(
         post_id=post_id,
-        store_id=store_id,
+        store_id=int(store_id),
         product_name=product_name,
-        price_yen=price_yen,
-        calories_kcal=calories_kcal,
-        sugar_g=sugar_g,
+        price_yen=int(price_yen),
+        calories_kcal=float(calories_kcal),
+        sugar_g=float(sugar_g),
         image_path=image_path,
         content=content  
     )

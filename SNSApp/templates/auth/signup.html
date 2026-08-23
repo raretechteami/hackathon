@@ -1,6 +1,9 @@
 {% extends "auth/base.html"%} {% block title %}新規会員登録 - おやつサポート{%
 endblock %} {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css')}}" />
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/signup.css')}}"
+/>
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/signup.css')}}"
@@ -58,11 +61,11 @@ endblock %} {% block page_css %}
 
           <div class="auth-button-container">
             <button class="auth-button" type="submit">登録する</button>
+            <a class="switch-auth-mode" href="{{ url_for('login_view') }}">
+              ログイン画面へ戻る
+            </a>
           </div>
         </form>
-        <div class="switch-auth-mode">
-          <a href="{{ url_for('login_view')}}">ログイン画面へ戻る</a>
-        </div>
       </div>
     </div>
   </main>
