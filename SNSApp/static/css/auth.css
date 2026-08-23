@@ -1,72 +1,71 @@
 .page-auth {
-    min-height: 100vh;
-    background: #FFE7A1;
+  min-height: 100vh;
+  background: #ffe7a1;
 }
 .auth-logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 44px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 44px;
 }
 
 .auth-logo img {
-    width: 287px;
-    height: auto;
+  width: 287px;
+  height: auto;
 }
 
 .page-auth-main {
-    display: flex;
-    justify-content: center;
-    padding: 0 16px;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
 }
 
 .auth-wrapper {
-    width: 100%;
-    max-width: 348px;
+  width: 100%;
+  max-width: 348px;
 }
 
 .card {
-    box-sizing: border-box;
-    background: var(--card-bg);
-    border-radius: 8px;
-    padding: 38px 20px;
-    
+  box-sizing: border-box;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 38px 20px;
 }
 
 .auth-title {
-    margin: 0 0 39px;
-    font-family: "Inter", sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-align: center;
+  margin: 0 0 39px;
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
 }
 
 .card-subtitle {
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0;
-    color: #AEAEB2;
-    text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #aeaeb2;
+  text-align: center;
 }
 
 .auth-form label {
-    display: block;
-    margin-bottom: 5.61px;
+  display: block;
+  margin-bottom: 5.61px;
 }
 
 .form-group + .form-group {
-    margin-top: 27.13px;
+  margin-top: 27.13px;
 }
 
 .auth-form input[type="text"],
-.auth-form input[type="password"]{
-    width: 100%;
-    height: 35.82px;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid #000000;
-    background: #ffffff;
+.auth-form input[type="password"] {
+  width: 100%;
+  height: 35.82px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid #000000;
+  background: #ffffff;
 }
 
 .auth-button-container {
@@ -76,19 +75,19 @@
 }
 
 .auth-button {
-    width: 100%;
-    height: 35px;
-    border: none;
-    border-radius: 20px;
-    background: #AFF4C6;
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: black;
+  width: 100%;
+  height: 35px;
+  border: none;
+  border-radius: 20px;
+  background: #aff4c6;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: black;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .switch-auth-mode {
@@ -101,18 +100,33 @@
 }
 
 .signup-link {
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: #0FB04A;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0fb04a;
 }
 
+.flash-messages {
+  max-width: 374px;
+  margin: 0 auto 16px;
+}
 
+.flash {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
 
+.flash-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
 
-
-
-
-
-
-
+.flash-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}

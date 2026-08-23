@@ -1,8 +1,12 @@
-/* =========================
-   ユーザー投稿画面
-   ========================= */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg, #fde89b);
+  min-height: 100vh;
+}
+
 .new-post {
-  width: 402px;
+  width: 100%;
   min-height: 874px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -10,9 +14,6 @@
   background-color: var(--bg, #fde89b);
 }
 
-/* =========================
-     投稿フォームカード
-     ========================= */
 .new-post form {
   width: 374px;
   margin: 0 auto;
@@ -23,9 +24,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* =========================
-     入力項目共通・均等な余白
-     ========================= */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -99,9 +97,6 @@
   cursor: pointer;
 }
 
-/* =========================
-     コメント
-     ========================= */
 .comment-box-wrapper {
   margin-top: 32px;
   width: 350px;
@@ -137,9 +132,6 @@
   color: #b0b0b0;
 }
 
-/* =========================
-     ボタン
-     ========================= */
 .form-buttons {
   display: flex;
   justify-content: space-between;

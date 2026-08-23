@@ -25,7 +25,12 @@
     <!-- 商品名 -->
     <div class="form-group">
       <label for="product_name">商品名</label>
-      <input type="text" id="product_name" name="product_name" />
+      <input
+        type="text"
+        id="product_name"
+        name="product_name"
+        value="{{ form_data.product_name if form_data else '' }}"
+      />
     </div>
 
     <!-- 店舗・価格 -->
@@ -34,15 +39,23 @@
         <label for="store_id">店舗</label>
         <select id="store_id" name="store_id">
           <option value="">▼ 選択してください</option>
-          {% for store in stores %}
+          {% for store in stores %} {% if form_data and form_data.store_id ==
+          store.id|string %}
+          <option value="{{ store.id }}" selected>{{ store.name }}</option>
+          {% else %}
           <option value="{{ store.id }}">{{ store.name }}</option>
-          {% endfor %}
+          {% endif %} {% endfor %}
         </select>
       </div>
 
       <div class="form-group">
         <label for="price_yen">価格（円）</label>
-        <input type="number" id="price_yen" name="price_yen" />
+        <input
+          type="number"
+          id="price_yen"
+          name="price_yen"
+          value="{{ form_data.price_yen if form_data else '' }}"
+        />
       </div>
     </div>
 
@@ -50,12 +63,23 @@
     <div class="form-row">
       <div class="form-group">
         <label for="calories_kcal">カロリー (kcal)</label>
-        <input type="number" id="calories_kcal" name="calories_kcal" />
+        <input
+          type="number"
+          id="calories_kcal"
+          name="calories_kcal"
+          value="{{ form_data.calories_kcal if form_data else '' }}"
+        />
       </div>
 
       <div class="form-group">
         <label for="sugar_g">糖分 (g)</label>
-        <input type="number" id="sugar_g" name="sugar_g" step="0.1" />
+        <input
+          type="number"
+          id="sugar_g"
+          name="sugar_g"
+          step="0.1"
+          value="{{ form_data.sugar_g if form_data else '' }}"
+        />
       </div>
     </div>
 
@@ -72,7 +96,9 @@
         id="content"
         name="content"
         placeholder="商品のおすすめポイント（味、栄養...）をお書きください"
-      ></textarea>
+      >
+{{ form_data.content if form_data else '' }}</textarea
+      >
     </div>
 
     <!-- ボタン -->

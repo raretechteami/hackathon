@@ -1,3 +1,16 @@
+:root {
+  --background-yellow: #fde89b;
+  --surface-gray: #ffffff;
+  --card-white: #ffffff;
+  --text-black: #333333;
+  --border-gray: #e5e5e5;
+  --soft-yellow: #fde68a;
+  --mint-green: #aff4c6;
+  --mint-green-dark: #15803d;
+  --danger-red: #ef4444;
+  --muted-gray: #8e8e93;
+  --file-button-gray: #f0f0f0;
+}
 
 * {
   box-sizing: border-box;
@@ -9,7 +22,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--surface-gray);
+  /* background: var(--surface-gray); */
+  background-color: var(--bg, #fde89b);
   color: var(--text-black);
   font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
   line-height: 1.2;
@@ -313,7 +327,8 @@ textarea {
 .detail-product-image {
   width: 132px;
   height: 100px;
-  object-fit: cover;
+  background-color: #f2f2f2;
+  object-fit: contain;
 }
 
 .detail-information {
@@ -387,6 +402,17 @@ textarea {
 }
 
 /* 画面06：自ユーザー投稿詳細 */
+
+.detail-main-card {
+  width: 373px;
+  max-width: 100%;
+  margin: 16px auto 0;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 14px 24px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
 .owner-edit-form {
   width: 360px;
@@ -647,4 +673,29 @@ textarea {
   .other-comments {
     max-width: calc(100% - 28px);
   }
+}
+
+.flash-messages {
+  max-width: 374px;
+  margin: 20px auto 16px;
+}
+
+.flash {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.flash-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.flash-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
 }
