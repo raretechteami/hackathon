@@ -1,12 +1,10 @@
-{% extends "base.html" %}
-
-{% block title %}403エラー - おやつサポート{% endblock %}
-
-{% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "auth/base.html" %} {% block title %}403エラー - おやつサポート{%
+endblock %} {% block page_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/error.css') }}"
+/>
+{% endblock %} {% block content %}
 <div class="page-error">
   <main class="page-error-main">
     <div class="error-wrapper">
