@@ -1,210 +1,214 @@
-
 {% extends "base.html" %}
 
-{% block title %}自ユーザー投稿詳細画面{% endblock %}
+{% block title %}投稿詳細画面{% endblock %}
 
 {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/post_detail.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
 {% endblock %}
 
 {% block content %}
+{% set is_owner = post.user_id == user_id %}
+{% set image_filename = post.image_path|replace('./static/', '')|replace('static/', '') %}
 
-<main class="post-detail">
+<main class="post-detail {% if is_owner %}owner-detail{% else %}other-detail{% endif %}">
+  <div class="detail-top-nav">
+    <a class="detail-back-button" href="{{ url_for('posts_view') }}">一覧に戻る</a>
+  </div>
 
-    <!-- 一覧に戻る -->
-    <div class="top-nav">
-        <button type="button" onclick="location.href='/posts'" class="btn-back">
-            一覧に戻る
-        </button>
+  <section class="detail-summary-card" aria-label="投稿の商品情報">
+    <img
+      class="detail-product-image"
+      src="{{ url_for('static', filename=image_filename) }}"
+      alt="{{ post.product_name }}の商品画像"
+    >
+
+    <div class="detail-information">
+      <p class="detail-poster-name">{{ post.user_name }}</p>
+      <h1 class="detail-product-name">{{ post.product_name }}</h1>
+      <p class="detail-store-name">{{ post.store_name }}</p>
+
+      <dl class="detail-metric-grid">
+        <div class="detail-metric-item detail-metric-highlight">
+          <dt>カロリー</dt>
+          <dd>{{ post.calories_kcal }} <span>kcal</span></dd>
+        </div>
+        <div class="detail-metric-item detail-metric-highlight">
+          <dt>糖分</dt>
+          <dd>{{ post.sugar_g }} <span>g</span></dd>
+        </div>
+        <div class="detail-metric-item">
+          <dt>価格</dt>
+          <dd>{{ post.price_yen }} <span>円</span></dd>
+        </div>
+        <div class="detail-metric-item">
+          <dt>コメント</dt>
+          <dd>{{ comments|length }}</dd>
+        </div>
+      </dl>
     </div>
+  </section>
 
-    <!-- 投稿概要 -->
-     <div class="post-summary">
+  {% if is_owner %}
+  <form
+    id="owner-edit-form"
+    class="owner-edit-form"
+    action="{{ url_for('update_post', post_id=post.id) }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-         <!-- 商品画像 -->
-        <div class="post-summary-image">
-            <img src="{{ url_for('static', filename=post.image_path) }}" alt="商品画像">
-     </div>
-        <!-- ニックネーム -->
-         <p class="summary-nickname">
-            {{ post.user_name }}
-        </p>
-
-         <!-- 商品名 -->
-        <p class="summary-product-name">
-            {{ post.product_name }}
-        </p>
-
-        <!-- 店舗 ここ怪しい-->
-         <p class="summary-store">
-            {{ post.store_id }}
-        </p>
-        
-        <!-- カロリー・糖分 -->
-         <div class="summary-nutrition">
-
-            <div class="summary-calories">
-                <span>カロリー</span>
-                <span>{{ post.calories_kcal }} kcal</span>
-            </div>
-        
-            <div class="summary-sugar">
-                <span>糖分</span>
-                <span>{{ post.sugar_g }} g</span>
-            </div>
-        
-         </div>
-
-        <!-- 価格・コメント数 -->
-         <div class="summary-info">
-
-            <div class="summary-price">
-                <span>価格</span>
-                <span>{{ post.price_yen }} 円</span>
-            </div>
-        
-            <div class="summary-comments">
-                <span>コメント</span>
-                <span>{{ comments|length }}</span>
-            </div>      
-
-         </div>
-
-     </div>
-
-<form method="POST" enctype="multipart/form-data">
-
-    <!-- 商品名 -->
-    <div class="form-group">
-
+    <div class="detail-form-grid">
+      <div class="detail-form-field detail-full-row">
         <label for="product_name">商品名</label>
         <input
-            type="text"
-            id="product_name"
-            name="product_name"
-            value="{{ post.product_name }}"
+          id="product_name"
+          type="text"
+          name="product_name"
+          value="{{ post.product_name }}"
+          maxlength="120"
+          required
         >
-    </div>
+      </div>
 
-    <!-- 店舗 -->
-     <div class="form-group">
-
+      <div class="detail-form-field">
         <label for="store_id">店舗</label>
-        <select id="store_id" name="store_id">
-            <option value="">▼ 選択してください</option>
-            
-            {% for store in stores %}
-                <option value="{{ store.id }}"
-                     {% if store.id == post.store_id %}selected{% endif %}>
-                    {{ store.name }}
-                </option>
-            {% endfor %}
-
+        <select id="store_id" name="store_id" required>
+          {% for store in stores %}
+          <option value="{{ store.id }}" {% if store.id == post.store_id %}selected{% endif %}>
+            {{ store.name }}
+          </option>
+          {% endfor %}
         </select>
-    </div>
+      </div>
 
-    <!-- 価格 -->
-    <div class="form-group">
-
+      <div class="detail-form-field">
         <label for="price_yen">価格（円）</label>
-
         <input
-            type="number"
-            id="price_yen"
-            name="price_yen"
-            value="{{ post.price_yen }}"
+          id="price_yen"
+          type="number"
+          name="price_yen"
+          value="{{ post.price_yen }}"
+          min="0"
+          step="1"
+          required
         >
+      </div>
 
-    </div>
-
-    <!-- カロリー・糖分 -->
-    <div class="form-group">
-
-        <label for="calories_kcal">カロリー (kcal) </label>
+      <div class="detail-form-field">
+        <label for="calories_kcal">カロリー（kcal）</label>
         <input
-            type="number"
-            id="calories_kcal"
-            name="calories_kcal"
-            value="{{ post.calories_kcal }}"
-        > 
-    </div>   
-
-    <div class="form-group">
-
-        <label for="sugar_g">糖分 (g) </label>
-        <input
-            type="number"
-            id="sugar_g"
-            name="sugar_g"
-            step="0.1"
-            value="{{ post.sugar_g }}"
+          id="calories_kcal"
+          type="number"
+          name="calories_kcal"
+          value="{{ post.calories_kcal }}"
+          min="0"
+          step="0.1"
+          required
         >
-    </div>
+      </div>
 
-    <!-- 商品画像 -->
-    <div class="form-group">
-        <label for="image">商品画像</label>
+      <div class="detail-form-field">
+        <label for="sugar_g">糖分（g）</label>
         <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
+          id="sugar_g"
+          type="number"
+          name="sugar_g"
+          value="{{ post.sugar_g }}"
+          min="0"
+          step="0.1"
+          required
         >
+      </div>
     </div>
 
-    <!-- コメント -->
-    <div class="form-group">
-        <label for="content">コメント</label>
-
-        <textarea
-            id="content"
-            name="content"
-            >{{ post.content }}</textarea>
+    <div class="detail-image-field">
+      <label for="image">商品画像</label>
+      <input
+        id="image"
+        type="file"
+        name="image"
+        accept="image/png,image/jpeg,image/gif"
+      >
     </div>
 
-    <!-- 編集完了 -->
-    <div class="form-buttons">
-
-        <button type="submit" class="edit-button">
-            編集完了
-        </button>
-
-    </div> 
-
-</form>
-
-    <!-- 削除 -->
-    <div class="delete-button-area">
-
-        <button type="button" class="delete-button">
-            削除
-        </button>
-
+    <div class="detail-comment-edit-field">
+      <label for="content">コメント</label>
+      <textarea
+        id="content"
+        name="content"
+        rows="5"
+        placeholder="コメントを入力・・・"
+        required
+      >{{ post.content }}</textarea>
     </div>
 
-    <!-- コメント一覧 -->
-    <div class="comment-list">
+    <div class="detail-edit-actions">
+      <button class="detail-edit-complete-button" type="submit">編集完了</button>
+      <button
+        class="detail-delete-button"
+        type="submit"
+        form="delete-post-form"
+        onclick="return confirm('この投稿を削除しますか？');"
+      >削除</button>
+    </div>
+  </form>
 
+  <form
+    id="delete-post-form"
+    action="{{ url_for('delete_post', post_id=post.id) }}"
+    method="post"
+    hidden
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  </form>
+
+  <section class="detail-comments owner-comments" aria-label="投稿されたコメント">
+    <div class="detail-comment-list">
+      {% if comments %}
         {% for comment in comments %}
-
-        <div class="comment-item">
-            <!-- ニックネーム -->
-             <p class="comment-user-name">
-              {{ comment.user_name }}
-             </p>
-
-            <!-- 投稿日時 -->
-             <p class="comment-date">
-                {{ comment.created_at }}
-             </p>
-
-            <!-- コメント本文 -->
-             <p class="comment-content">
-                 {{ comment.content }}
-             </p>
-        </div>
-    {% endfor %}
+        <article class="detail-comment-card">
+          <p class="detail-comment-user">{{ comment.user_name }}</p>
+          <time class="detail-comment-time">{{ comment.created_at }}</time>
+          <p class="detail-comment-body">{{ comment.content }}</p>
+        </article>
+        {% endfor %}
+      {% else %}
+        <p class="detail-empty-comments">まだコメントはありません。</p>
+      {% endif %}
     </div>
+  </section>
+
+  {% else %}
+  <section class="detail-comments other-comments">
+    <div class="detail-comment-form" aria-labelledby="comment-heading">
+      <h2 id="comment-heading">コメント</h2>
+      <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea
+          name="comment_text"
+          rows="6"
+          placeholder="コメントを入力・・・"
+          required
+        ></textarea>
+        <button class="detail-comment-submit" type="submit">コメントする</button>
+      </form>
+    </div>
+
+    <div class="detail-comment-list" aria-label="投稿されたコメント">
+      {% if comments %}
+        {% for comment in comments %}
+        <article class="detail-comment-card">
+          <p class="detail-comment-user">{{ comment.user_name }}</p>
+          <time class="detail-comment-time">{{ comment.created_at }}</time>
+          <p class="detail-comment-body">{{ comment.content }}</p>
+        </article>
+        {% endfor %}
+      {% else %}
+        <p class="detail-empty-comments">まだコメントはありません。</p>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
 </main>
-
-
+{% endblock %}
