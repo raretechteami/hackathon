@@ -19,58 +19,76 @@
     </div>
 
     <!-- 投稿概要 -->
-     <div class="post-summary">
+     <div class="card post-detail-card">
+
+        <div class="post-card-inner">
 
          <!-- 商品画像 -->
-        <div class="post-summary-image">
-            <img src="{{ url_for('static', filename=post.image_path) }}" alt="商品画像">
-     </div>
-        <!-- ニックネーム -->
-         <p class="summary-nickname">
+        <div class="post-image-box">
+            {% if post.image_path %}
+            <img src="{{ url_for('static', filename=post.image_path) }}" alt="{{ post.product_name }}"
+            class="product-image"
+            />
+             {% endif %}
+        </div>
+
+    <div class="post-info-box">
+
+         <!-- ニックネーム -->
+         <div class="post-user-header">
             {{ post.user_name }}
-        </p>
+         </div>
 
          <!-- 商品名 -->
-        <p class="summary-product-name">
+         <h2 class="product-name">
             {{ post.product_name }}
-        </p>
+         </h2>
 
-        <!-- 店舗 ここ怪しい-->
-         <p class="summary-store">
+        <!-- 店舗 -->
+         <p class="store-name">
             {{ post.store_id }}
         </p>
         
         <!-- カロリー・糖分 -->
-         <div class="summary-nutrition">
+         <div class="stats-grid">
 
-            <div class="summary-calories">
-                <span>カロリー</span>
-                <span>{{ post.calories_kcal }} kcal</span>
+            <div class="stat-badge badge-yellow">
+                <span class="stat-label">カロリー</span>
+                <span class="stat-value">
+                    {{ post.calories_kcal }} <small>kcal</small>
+                </span>
             </div>
         
-            <div class="summary-sugar">
-                <span>糖分</span>
-                <span>{{ post.sugar_g }} g</span>
+             <div class="stat-badge badge-yellow">
+                <span class="stat-label">糖分</span>
+                <span class="stat-value">
+                    {{ post.sugar_g }} <small>g</small>
+                </span>
             </div>
         
-         </div>
 
         <!-- 価格・コメント数 -->
-         <div class="summary-info">
+         <div class="stat-badge badge-gray">
 
-            <div class="summary-price">
-                <span>価格</span>
-                <span>{{ post.price_yen }} 円</span>
+            <span class="stat-label">価格</span>
+                <span class="stat-value">
+                    {{ post.price_yen }} <small>円</small>
+                </span>
             </div>
         
-            <div class="summary-comments">
-                <span>コメント</span>
-                <span>{{ comments|length }}</span>
+            <div class="stat-badge badge-gray">
+                <span class="stat-label">コメント</span>
+                <span class="stat-value">
+                    {{ comments|length }}
+                </span>
             </div>      
 
          </div>
 
      </div>
+
+    </div>
+
 
 <form method="POST" enctype="multipart/form-data">
 
@@ -85,6 +103,9 @@
             value="{{ post.product_name }}"
         >
     </div>
+
+    <!-- 店舗・価格 -->
+    <div class="form-row store-price-row">
 
     <!-- 店舗 -->
      <div class="form-group">
@@ -114,10 +135,13 @@
             name="price_yen"
             value="{{ post.price_yen }}"
         >
-
+    </div>
     </div>
 
     <!-- カロリー・糖分 -->
+    <div class="form-row nutrition-row">
+    
+    <!-- カロリー -->
     <div class="form-group">
 
         <label for="calories_kcal">カロリー (kcal) </label>
@@ -129,6 +153,7 @@
         > 
     </div>   
 
+    <!-- 糖分 -->
     <div class="form-group">
 
         <label for="sugar_g">糖分 (g) </label>
@@ -140,9 +165,10 @@
             value="{{ post.sugar_g }}"
         >
     </div>
-
+    </div>
     <!-- 商品画像 -->
-    <div class="form-group">
+    <div class="form-group image-form-group">
+
         <label for="image">商品画像</label>
         <input
             type="file"
@@ -153,7 +179,7 @@
     </div>
 
     <!-- コメント -->
-    <div class="form-group">
+    <div class="form-group comment-form-group">
         <label for="content">コメント</label>
 
         <textarea
@@ -169,18 +195,17 @@
             編集完了
         </button>
 
-    </div> 
-
-</form>
-
     <!-- 削除 -->
-    <div class="delete-button-area">
 
         <button type="button" class="delete-button">
             削除
         </button>
 
-    </div>
+    </div> 
+
+</form>
+
+
 
     <!-- コメント一覧 -->
     <div class="comment-list">
