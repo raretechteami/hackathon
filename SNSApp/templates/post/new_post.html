@@ -1,116 +1,111 @@
-{% extends "base.html" %}
-
-{% block title %}ユーザー投稿画面{% endblock %}
-
+{% extends "auth/base.html" %} {% block title %}ユーザー投稿画面{% endblock %}
 {% block page_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/new_post.css') }}">
-{% endblock %}
-
-{% block content %}
-
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/new_post.css') }}"
+/>
+{% endblock %} {% block content %}
 <main class="new-post">
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
 
-    <form method="POST" enctype="multipart/form-data">
-        <!-- 商品名 -->
-        <div class="form-group">
+  <form
+    action="{{ url_for('create_post') }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-            <label for="product_name">商品名</label>
-            <input
-                type="text"
-                id="product_name"
-                name="product_name"
-            >
-        </div>
+    <!-- 商品名 -->
+    <div class="form-group">
+      <label for="product_name">商品名</label>
+      <input
+        type="text"
+        id="product_name"
+        name="product_name"
+        value="{{ form_data.product_name if form_data else '' }}"
+      />
+    </div>
 
-        <!-- 店舗・価格 -->
-        <div class="form-row">
+    <!-- 店舗・価格 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="store_id">店舗</label>
+        <select id="store_id" name="store_id">
+          <option value="">▼ 選択してください</option>
+          {% for store in stores %} {% if form_data and form_data.store_id ==
+          store.id|string %}
+          <option value="{{ store.id }}" selected>{{ store.name }}</option>
+          {% else %}
+          <option value="{{ store.id }}">{{ store.name }}</option>
+          {% endif %} {% endfor %}
+        </select>
+      </div>
 
-            <div class="form-group">
-                <label for="store_id">店舗</label>
-                <select id="store_id" name="store_id">
-                    <option value="">▼ 選択してください</option>
-                    <option value="1">ローソン</option>
-                    <option value="2">ナチュラルローソン</option>
-                    <option value="3">ファミリーマート</option>
-                    <option value="4">セブンイレブン</option>
-                    <option value="5">ミニストップ</option>
-                    <option value="6">デイリーヤマザキ</option>
-                    <option value="7">まいばすけっと</option>
-                </select>
-            </div>
+      <div class="form-group">
+        <label for="price_yen">価格（円）</label>
+        <input
+          type="number"
+          id="price_yen"
+          name="price_yen"
+          value="{{ form_data.price_yen if form_data else '' }}"
+        />
+      </div>
+    </div>
 
-            <div class="form-group">
-                <label for="price">価格（円）</label>
-                <input
-                    type="number"
-                    id="price"
-                    name="price"
-                >
-            </div>
-        </div>
+    <!-- カロリー・糖分 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="calories_kcal">カロリー (kcal)</label>
+        <input
+          type="number"
+          id="calories_kcal"
+          name="calories_kcal"
+          value="{{ form_data.calories_kcal if form_data else '' }}"
+        />
+      </div>
 
-        <!-- カロリー・糖分 -->
-        <div class="form-row">
+      <div class="form-group">
+        <label for="sugar_g">糖分 (g)</label>
+        <input
+          type="number"
+          id="sugar_g"
+          name="sugar_g"
+          step="0.1"
+          value="{{ form_data.sugar_g if form_data else '' }}"
+        />
+      </div>
+    </div>
 
-            <div class="form-group">
-                <label for="calories">カロリー (kcal) </label>
-                <input
-                    type="number"
-                    id="calories"
-                    name="calories"
-                >
-            </div>
+    <!-- 商品画像 -->
+    <div class="form-group">
+      <label for="file">商品画像</label>
+      <input type="file" id="file" name="file" accept="image/*" />
+    </div>
 
-            <div class="form-group">
-                <label for="sugar">糖分 (g) </label>
-                <input
-                    type="number"
-                    id="sugar"
-                    name="sugar"
-                    step="0.1"
-                >
-            </div>
+    <!-- コメント -->
+    <div class="comment-box-wrapper">
+      <label for="content">コメント</label>
+      <textarea
+        id="content"
+        name="content"
+        placeholder="商品のおすすめポイント（味、栄養...）をお書きください"
+      >
+{{ form_data.content if form_data else '' }}</textarea
+      >
+    </div>
 
-        </div>
-
-        <!-- 商品画像 -->
-         <div class="form-group">
-            <label for="image">商品画像</label>
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-            >
-         </div>
-
-         <!-- コメント -->
-        <div class="form-group">
-            <label for="comment">コメント</label>
-
-            <textarea
-                id="comment"
-                name="comment"
-                placeholder="「商品のおすすめポイント(味、栄養素...)をお書きください"
-            ></textarea>
-        </div>
-
-        <!-- ボタン -->
-         <div class="form-buttons">
-
-            <button type="button" class="cancel-button">
-                キャンセル
-            </button>
-
-            <button type="submit" class="post-button">
-                投稿
-            </button>
-
-            <button type="button" class="draft-button">
-                一時保存
-            </button>
-               
-         </div>
-    </form>
+    <!-- ボタン -->
+    <div class="form-buttons">
+      <a href="{{ url_for('posts_view') }}" class="cancel-button">キャンセル</a>
+      <button type="submit" class="post-button">投稿</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

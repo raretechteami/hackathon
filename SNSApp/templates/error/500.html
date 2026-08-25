@@ -1,0 +1,20 @@
+{% extends "auth/base.html" %} {% block title %}500エラー - おやつサポート{%
+endblock %} {% block page_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/error.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="page-error">
+  <main class="page-error-main">
+    <div class="error-wrapper">
+      <section class="error-card">
+        <p class="error-code">500</p>
+        <h1 class="error-heading">サーバーエラー</h1>
+        <p class="error-message">処理中にエラーが発生しました。</p>
+        <a class="error-button" href="{{ url_for('index') }}">戻る</a>
+      </section>
+    </div>
+  </main>
+</div>
+{% endblock %}

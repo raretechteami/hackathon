@@ -1,0 +1,120 @@
+{% extends "auth/base.html" %} {% block title %} フォロワー投稿詳細画面 {{
+post.product_name }}{% endblock %} {% block page_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/follow_post_detail.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="container detail-container">
+  <!-- 一覧に戻るボタン -->
+  <div class="top-nav">
+    <button type="button" onclick="location.href='/posts'" class="btn-back">
+      一覧に戻る
+    </button>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <div class="flash-messages">
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
+
+  <!-- 投稿詳細カード -->
+  <div class="card post-detail-card">
+    <div class="post-card-inner">
+      <!-- 左側：商品画像 -->
+      <div class="post-image-box">
+        {% if post.image_path %}
+        <img
+          src="{{ url_for('static', filename=post.image_path.replace('./static/', '')) }}"
+          alt="{{ post.product_name }}"
+          class="product-image"
+          onerror="this.style.display='none'"
+        />
+        {% endif %}
+      </div>
+
+      <!-- 右側：商品情報 -->
+      <div class="post-info-box">
+        <div class="post-user-header">{{ post.user_name }}</div>
+        <h2 class="product-name">{{ post.product_name }}</h2>
+        <p class="store-name">{{ post.store_name }}</p>
+
+        <div class="stats-grid">
+          <div class="stat-badge badge-yellow">
+            <span class="stat-label">カロリー</span>
+            <span class="stat-value"
+              >{{ post.calories_kcal }} <small>kcal</small></span
+            >
+          </div>
+
+          <div class="stat-badge badge-yellow">
+            <span class="stat-label">糖分</span>
+            <span class="stat-value">{{ post.sugar_g }} <small>g</small></span>
+          </div>
+
+          <div class="stat-badge badge-gray">
+            <span class="stat-label">価格</span>
+            <span class="stat-value"
+              >{{ post.price_yen }} <small>円</small></span
+            >
+          </div>
+
+          <div class="stat-badge badge-gray">
+            <span class="stat-label">コメント</span>
+            <span class="stat-value"
+              >{{ comments|length if comments else 0 }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- コメントセクション -->
+  <div class="card comments-card">
+    <h3 class="section-title">コメント</h3>
+
+    <!-- コメント入力フォーム -->
+    <form
+      action="{{ url_for('add_comment', post_id=post.id) }}"
+      method="post"
+      class="comment-form"
+    >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <div class="form-group">
+        <textarea
+          name="comment_text"
+          class="comment-textarea"
+          placeholder="コメントを入力してください"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn-submit-comment">コメントする</button>
+      </div>
+    </form>
+
+    <!-- コメント一覧 -->
+    <div class="comment-list">
+      {% if comments %} {% for comment in comments %}
+      <div class="comment-item">
+        <div class="comment-header">
+          <span class="comment-user">{{ comment.user_name }}</span>
+          <span class="comment-date">{{ comment.created_at }}</span>
+        </div>
+        <div class="comment-body">{{ comment.content }}</div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="no-comments">まだコメントはありません。</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

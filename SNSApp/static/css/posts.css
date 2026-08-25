@@ -1,142 +1,701 @@
+:root {
+  --background-yellow: #fde89b;
+  --surface-gray: #ffffff;
+  --card-white: #ffffff;
+  --text-black: #333333;
+  --border-gray: #e5e5e5;
+  --soft-yellow: #fde68a;
+  --mint-green: #aff4c6;
+  --mint-green-dark: #15803d;
+  --danger-red: #ef4444;
+  --muted-gray: #8e8e93;
+  --file-button-gray: #f0f0f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
 body {
-  background-color: #fde89b;
+  margin: 0;
+  /* background: var(--surface-gray); */
+  background-color: var(--bg, #fde89b);
+  color: var(--text-black);
+  font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  line-height: 1.2;
 }
 
-.detail-container {
-  max-width: 480px;
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* 画面03：投稿一覧 */
+
+.page {
+  width: 402px;
+  max-width: 100%;
+  min-height: 874px;
   margin: 0 auto;
-  padding: 16px;
+  overflow-x: hidden;
+  background: var(--background-yellow);
 }
 
-.btn-back {
-  display: inline-block;
-  background-color: #fff;
-  padding: 8px 18px;
+.page > header {
+  padding-top: 75px;
+}
+
+.header-inner {
+  display: flex;
+  width: calc(100% - 52px);
+  height: 40px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logout {
+  color: var(--text-black);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.new-post {
+  display: inline-flex;
+  width: 90px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
   border-radius: 20px;
+  background: var(--card-white);
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
   text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.post-card-inner {
-  display: flex;
-  gap: 16px;
-}
-
-.post-image-box {
-  width: 45%;
-}
-
-.product-image {
+.page main {
   width: 100%;
-  border-radius: 12px;
-  object-fit: cover;
 }
 
-.post-info-box {
-  width: 55%;
+.page-title {
+  height: 0;
 }
 
-.product-name {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 4px 0;
-}
-
-.store-name {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.stat-badge {
-  padding: 6px 8px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.badge-yellow {
-  background-color: #fde68a;
-}
-
-.badge-gray {
-  background-color: #f1f5f9;
-  border: 1px solid #cbd5e1;
-}
-
-.stat-label {
-  font-size: 10px;
-  color: #475569;
-}
-
-.stat-value {
+.post-list-actions {
+  width: 369px;
+  margin: 28px auto 23px;
+  padding-right: 15px;
+  color: var(--text-black);
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
-.comment-textarea {
-  width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 12px;
-  box-sizing: border-box;
-  font-size: 14px;
-  background-color: #f8fafc;
+.post-list-actions .edit {
+  color: var(--text-black);
 }
 
-.form-submit {
+.post-list-actions .delate,
+.post-list-actions .delete {
+  color: var(--delete-link-red);
+}
+
+.flash-messages {
+  position: static;
+  width: 369px;
+  margin: -12px auto 16px;
+}
+
+.flash {
+  border-radius: 8px;
+  background: var(--card-white);
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.35;
   text-align: center;
-  margin: 12px 0;
 }
 
-.btn-submit-comment {
-  background-color: #a7f3d0;
-  border: none;
-  border-radius: 24px;
-  padding: 10px 40px;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
+.flash + .flash {
+  margin-top: 8px;
 }
 
-.comment-item {
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 12px;
-  margin-top: 10px;
-  background: #ffffff;
+.flash-success {
+  color: var(--mint-green-dark);
 }
 
-.comment-header {
-  font-size: 12px;
-  color: #64748b;
-  margin-bottom: 6px;
+.flash-error {
+  color: var(--danger-red);
 }
 
-.comment-date {
+.post-card {
+  position: relative;
+  width: 369px;
+  height: 658px;
+  margin: 0 auto 64px;
+  border-radius: 8px;
+  background: var(--card-white);
+}
+
+.post-content,
+.post-body {
+  position: static;
+}
+
+.post-body img {
+  position: absolute;
+  top: 37px;
+  left: 50%;
+  width: 334px;
+  height: 252px;
+  transform: translateX(-50%);
+  object-fit: cover;
+}
+
+.post-header {
+  position: absolute;
+  top: 329px;
+  left: 28px;
+  right: 28px;
+}
+
+.post-user-info,
+.display-name,
+.post-time {
+  margin: 0;
+}
+
+.display-name {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.post-time {
+  margin-top: 14px;
+  color: var(--muted-gray);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.product_name {
+  position: absolute;
+  top: 382px;
+  left: 28px;
+  right: 28px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.store_name {
+  position: absolute;
+  top: 431px;
+  left: 28px;
+  right: 28px;
+  font-size: 14px;
+}
+
+.nutrition-info {
+  position: absolute;
+  top: 486px;
+  left: 31px;
+  right: 31px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.calories_kcal,
+.sugar_g {
+  display: grid;
+  width: 112px;
+  height: 42px;
+  align-content: center;
+  border-radius: 8px;
+  background: var(--soft-yellow);
+  padding: 4px 13px;
+}
+
+.calories-label,
+.sugar-label {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.calories-value,
+.sugar-value {
+  display: flex;
+  margin-top: 4px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.calories-unit,
+.sugar-unit {
   margin-left: 8px;
 }
 
-.comment-body {
+.post-footer {
+  position: absolute;
+  top: 590px;
+  left: 31px;
+  right: 29px;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-count {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.detail {
+  display: inline-flex;
+  width: 95px;
+  height: 33px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--mint-green);
+  color: var(--text-black);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/*画面05・06共通：投稿詳細
+  同じ post_detail.html を所有者判定で使い分ける */
+
+.post-detail {
+  width: 402px;
+  max-width: 100%;
+  min-height: 874px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background: var(--background-yellow);
+  padding: 62px 14px 32px;
+}
+
+.owner-detail {
+  padding-top: 56px;
+}
+
+.detail-top-nav {
+  height: 40px;
+}
+
+.detail-back-button {
+  display: inline-flex;
+  width: 97px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--surface-gray);
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.detail-summary-card {
+  display: grid;
+  width: 373px;
+  max-width: 100%;
+  height: 214px;
+  margin: 15px auto 0;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 12px;
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 16px 10px;
+}
+
+.owner-detail .detail-summary-card {
+  margin-top: 9px;
+}
+
+.detail-product-image {
+  width: 132px;
+  height: 100px;
+  background-color: #f2f2f2;
+  object-fit: contain;
+}
+
+.detail-information {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.detail-poster-name,
+.detail-product-name,
+.detail-store-name,
+.detail-metric-item dt,
+.detail-metric-item dd {
+  margin: 0;
+}
+
+.detail-poster-name {
+  font-size: 12px;
+}
+
+.detail-product-name {
+  overflow: hidden;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-store-name {
+  margin-top: 13px;
+  font-size: 12px;
+}
+
+.detail-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 15px;
+  margin: 11px 0 0;
+}
+
+.detail-metric-item {
+  display: grid;
+  min-width: 0;
+  height: 39px;
+  align-content: center;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--card-white);
+  padding: 4px 10px;
+}
+
+.detail-metric-highlight {
+  border-color: transparent;
+  background: var(--soft-yellow);
+}
+
+.detail-metric-item dt {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.detail-metric-item dd {
+  margin-top: 3px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.detail-metric-item dd span {
+  margin-left: 7px;
+}
+
+/* 画面06：自ユーザー投稿詳細 */
+
+.detail-main-card {
+  width: 373px;
+  max-width: 100%;
+  margin: 16px auto 0;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 14px 24px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.owner-edit-form {
+  width: 360px;
+  max-width: calc(100% - 14px);
+  margin: 9px auto 0;
+}
+
+.detail-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 28px;
+}
+
+.detail-full-row {
+  grid-column: 1 / -1;
+}
+
+.detail-form-field,
+.detail-image-field,
+.detail-comment-edit-field {
+  display: grid;
+  min-width: 0;
+  row-gap: 4px;
+}
+
+.detail-form-field label,
+.detail-image-field label,
+.detail-comment-edit-field label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.detail-form-field input,
+.detail-form-field select {
+  width: 100%;
+  height: 26px;
+  min-width: 0;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  background: var(--card-white);
+  padding: 0 8px;
+  color: var(--text-black);
+  font-size: 12px;
+}
+
+.detail-image-field {
+  margin-top: 10px;
+}
+
+.detail-image-field input[type="file"] {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  background: var(--card-white);
+  color: var(--text-black);
+  font-size: 10px;
+}
+
+.detail-image-field input[type="file"]::file-selector-button {
+  height: 22px;
+  margin: 3px 8px 3px 3px;
+  border: 1px solid var(--text-black);
+  background: var(--file-button-gray);
+  font-size: 10px;
+}
+
+.detail-comment-edit-field {
+  margin-top: 13px;
+  row-gap: 7px;
+}
+
+.detail-comment-edit-field label {
+  margin-left: 14px;
+  font-size: 14px;
+}
+
+.detail-comment-edit-field textarea {
+  width: 302px;
+  max-width: calc(100% - 26px);
+  height: 94px;
+  margin: 0 auto;
+  resize: none;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 8px;
+  color: var(--text-black);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.detail-edit-actions {
+  display: flex;
+  margin: 15px 12px 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-edit-complete-button,
+.detail-delete-button,
+.detail-comment-submit {
+  display: inline-flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 20px;
+  color: var(--text-black);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.detail-edit-complete-button,
+.detail-delete-button {
+  width: 97px;
+}
+
+.detail-edit-complete-button {
+  background: var(--mint-green);
+}
+
+.detail-delete-button {
+  background: var(--danger-red);
+}
+
+.owner-comments {
+  width: 302px;
+  margin: 17px auto 0;
+}
+
+.owner-comments .detail-comment-list {
+  width: 100%;
+}
+
+.owner-comments .detail-comment-card {
+  min-height: 80px;
+}
+
+/* 画面05：他ユーザー投稿詳細 */
+
+.other-comments {
+  width: 373px;
+  max-width: 100%;
+  min-height: 440px;
+  margin: 24px auto 0;
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 23px 23px 18px;
+}
+
+.detail-comment-form {
+  width: 325px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.detail-comment-form h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.detail-comment-form textarea {
+  width: 100%;
+  height: 148px;
+  margin-top: 10px;
+  resize: none;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 64px 18px 10px;
+  color: var(--text-black);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.detail-comment-form textarea::placeholder,
+.detail-comment-edit-field textarea::placeholder {
+  color: var(--muted-gray);
+  opacity: 1;
+}
+
+.detail-comment-submit {
+  display: flex;
+  width: 190px;
+  margin: 23px auto 0;
+  background: var(--mint-green);
+}
+
+.detail-comment-list {
+  display: grid;
+  width: 325px;
+  max-width: 100%;
+  margin: 38px auto 0;
+  row-gap: 10px;
+}
+
+.detail-comment-card {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 143px;
+  align-content: start;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 7px 10px 10px;
+}
+
+.detail-comment-user,
+.detail-comment-time,
+.detail-comment-body {
+  margin: 0;
+}
+
+.detail-comment-user,
+.detail-comment-time {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.detail-comment-time {
+  margin-top: 8px;
+  color: var(--muted-gray);
+}
+
+.detail-comment-body {
+  min-width: 0;
+  margin-top: 11px;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.detail-empty-comments {
+  margin: 0;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  background: var(--surface-gray);
+  padding: 16px;
   font-size: 13px;
-  line-height: 1.5;
+  text-align: center;
+}
+
+@media (max-width: 401px) {
+  .page,
+  .post-detail {
+    width: 100%;
+  }
+
+  .post-card,
+  .post-list-actions,
+  .flash-messages,
+  .detail-summary-card,
+  .other-comments {
+    max-width: calc(100% - 28px);
+  }
+}
+
+.flash-messages {
+  max-width: 374px;
+  margin: 20px auto 16px;
+}
+
+.flash {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.flash-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.flash-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
 }

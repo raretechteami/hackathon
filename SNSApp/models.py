@@ -80,61 +80,21 @@ class Post:
 
 
     @classmethod
-    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content):
-
-    def create(cls,user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content:
+    def create(cls, user_id, product_name, store_id, calories_kcal, sugar_g, price_yen, image_path, content):
         conn = db_pool.get_conn()
         try:
-             with conn.cursor() as cur:
-                sql = "INSERT INTO posts (user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s);"
-                cur.execute(sql,(user_id,store_id, product_name,price_yen, calories_kcal, sugar_g, image_path, content))
+            with conn.cursor() as cur:
+                sql = """
+                    INSERT INTO posts (user_id, product_name, store_id, calories_kcal, sugar_g, price_yen, image_path, content, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW());
+                """
+                cur.execute(sql, (user_id, product_name, store_id, calories_kcal, sugar_g, price_yen, image_path, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
             abort(500)
         finally:
             db_pool.release(conn)
-
-
-
-
-
-    #コンビニデータ取得
-
-class ConvenienceStore:
-    @classmethod
-    def get_all(cls):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = """
-                    SELECT * 
-                    FROM  ConvenienceStore ORDER BY id ASC""";
-                cur.execute(sql)
-                 ConvenienceStore = cur.fetchall()
-            
-            return  ConvenienceStore
-        except pymysql.Error as e:
-            print(f'システムエラーが発生しました: {e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @classmethod
     def delete(cls, post_id):
@@ -191,6 +151,34 @@ class ConvenienceStore:
 
 
 
+
+
+    #コンビニデータ取得
+
+class ConvenienceStore:
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                    SELECT * 
+                    FROM  convenience_stores ORDER BY id ASC;
+                    """
+                cur.execute(sql)
+                ConvenienceStore = cur.fetchall()
+            
+            return  ConvenienceStore
+        except pymysql.Error as e:
+            print(f'システムエラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+
+
+
+
 class Comment:
     @classmethod
     def create(cls, user_id, post_id, comment_text):
@@ -221,6 +209,21 @@ class Comment:
                 cur.execute(sql,(post_id,))
                 Comments = cur.fetchall()
             return Comments
+        except pymysql.Error as e:
+            print(f'システムエラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def get_count_by_post_id(cls, post_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "SELECT COUNT(*) AS count FROM comments WHERE post_id = %s;"
+                cur.execute(sql, (post_id,))
+                result = cur.fetchone()
+            return result['count'] if result else 0
         except pymysql.Error as e:
             print(f'システムエラーが発生しました: {e}')
             abort(500)

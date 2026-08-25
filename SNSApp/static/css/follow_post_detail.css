@@ -1,0 +1,212 @@
+body {
+  background-color: #fde89b;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: #333333;
+}
+
+.detail-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* 一覧に戻るボタン */
+.btn-back {
+  display: inline-block;
+  background-color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #dcdcdc;
+  text-decoration: none;
+  color: #333333;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.post-card-inner {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* 左側：商品画像 */
+.post-image-box {
+  width: 125px;
+  min-width: 125px;
+  height: 125px;
+  background-color: #f2f2f2;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  object-fit: contain;
+  justify-content: center;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 右側：商品情報 */
+.post-info-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-user-header {
+  font-size: 12px;
+  color: #777777;
+  margin-bottom: 2px;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 2px 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.store-name {
+  font-size: 12px;
+  color: #666666;
+  margin: 0 0 10px 0;
+}
+
+/* 2×2 バッジグリッド */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.stat-badge {
+  border-radius: 10px;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 10px;
+  color: #555555;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: bold;
+  color: #222222;
+}
+
+.badge-yellow {
+  background-color: #fde68a;
+}
+
+.badge-gray {
+  background-color: #f5f5f5;
+  border: 1px solid #e5e5e5;
+}
+
+.comments-card .section-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0 0 12px 0;
+}
+
+.comment-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 13px;
+  resize: none;
+  background-color: #ffffff;
+  outline: none;
+}
+
+.comment-textarea::placeholder {
+  color: #aaaaaa;
+}
+
+.comment-textarea:focus {
+  border-color: #a0edc0;
+}
+
+.btn-submit-comment {
+  display: block;
+  width: 150px;
+  margin: 14px auto 16px;
+  background-color: #9fe8bc;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #1f3d2b;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-submit-comment:hover {
+  background-color: #8eddb0;
+}
+
+/* コメント一覧 */
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-item {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.comment-header {
+  font-size: 11px;
+  color: #888888;
+  margin-bottom: 4px;
+  display: flex;
+  gap: 8px;
+}
+
+.comment-user {
+  font-weight: bold;
+  color: #444444;
+}
+
+.comment-body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.no-comments {
+  font-size: 13px;
+  color: #999999;
+  text-align: center;
+  padding: 12px 0;
+}
