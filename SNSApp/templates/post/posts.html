@@ -30,26 +30,29 @@ block page_css %}
     </div>
     {% endif %} {% endwith %} {% for post in posts %}
     <div class="post-item">
-      {% if post.user_id == user_id %}
-      <a
-        class="post-list-actions"
-        href="{{ url_for('post_detail_view', post_id=post.id) }}"
-        aria-label="{{ post.product_name }}の編集・削除画面を開く"
-      >
-        <span class="edit">編集</span>
-        <span class="action-separator">/</span>
-        <span class="delete">削除</span>
-      </a>
-      {% endif %}
 
       <div class="post-card">
       <div class="post-content">
+
         <div class="post-header">
           <div class="post-user-info">
             <p class="display-name">{{ post.user_name }}</p>
             <p class="post-time">{{ post.created_at }}</p>
           </div>
-        </div>
+        
+         {% if post.user_id == user_id %}
+        <a
+          class="post-list-actions"
+          href="{{ url_for('post_detail_view', post_id=post.id) }}"
+          aria-label="{{ post.product_name }}の編集・削除画面を開く"
+        >
+          <span class="edit">編集</span>
+          <span class="action-separator">/</span>
+          <span class="delete">削除</span>
+
+        </a>
+         {% endif %}
+      </div>
 
         <div class="post-body">
           <img
@@ -77,6 +80,7 @@ block page_css %}
               </div>
             </div>
           </div>
+
           <div class="post-footer">
             <div class="post-actions">
               <!-- コメント数 -->
@@ -85,13 +89,16 @@ block page_css %}
               </span>
 
               <a class="detail" href="/posts/{{ post.id }}">詳細</a>
+
             </div>
           </div>
+
         </div>
       </div>
-      </div>
+     </div>
+
     </div>
-    {% endfor %}
+     {% endfor %}
   </main>
 </div>
 {% endblock %}
