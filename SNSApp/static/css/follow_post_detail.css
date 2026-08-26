@@ -1,5 +1,4 @@
 body {
-  background-color: #fde89b;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -8,26 +7,53 @@ body {
 }
 
 .detail-container {
-  max-width: 400px;
+  width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 16px;
+  padding: 116px 14px 45px;
   box-sizing: border-box;
+  background-color: var(--bg);
+}
+
+.detail-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 116px 14px 45px;
+  box-sizing: border-box;
+  background-color: var(--bg);
+}
+
+.top-logo {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: auto;
 }
 
 /* 一覧に戻るボタン */
+
+.top-nav {
+  width: 97px;
+  height: 40px;
+  position: relative;
+  top: -50px;
+  z-index: 2;
+  margin-top: -30;
+}
 .btn-back {
-  display: inline-block;
-  background-color: #ffffff;
-  padding: 8px 18px;
+  width: 97px;
+  height: 40px;
+  border: none;
   border-radius: 20px;
-  border: 1px solid #dcdcdc;
-  text-decoration: none;
-  color: #333333;
-  font-weight: bold;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: Inter, sans-serif;
   font-size: 14px;
-  margin-bottom: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  font-weight: 600;
 }
 
 .card {
@@ -209,4 +235,27 @@ body {
   color: #999999;
   text-align: center;
   padding: 12px 0;
+}
+
+.post-content {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding-right: 6px;
+
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #000000;
+    word-break: break-word;
+}
+
+.post-content-card {
+    padding-top: 12px;
+}
+
+.post-content-card .section-title {
+    margin-top: 0;
+    margin-bottom: 12px;
 }
