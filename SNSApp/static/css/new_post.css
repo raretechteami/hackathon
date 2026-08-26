@@ -10,8 +10,26 @@ body {
   min-height: 100vh;;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 116px 14px 40px;
+  padding: 100px 14px 40px;
   background-color: var(--bg, #fde89b);
+}
+
+/* =========================
+   投稿画面ロゴ
+   ========================= */
+
+.new-post-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.new-post-logo img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  transform: translateY(-15px);
 }
 
 .new-post form {
@@ -78,22 +96,18 @@ body {
 /* 商品画像 */
 .form-group input[type="file"] {
   width: 350px;
-  height: 34px;
+  height: 30px;
   box-sizing: border-box;
   border: 1px solid #aeaeb2;
-  border-radius: 8px;
-  font-size: 12px;
+  border-radius: 6px;
+  padding: 2px 8px;
 }
 
 .form-group input[type="file"]::file-selector-button {
-  font-family: Inter, sans-serif;
-  font-size: 11px;
+   font-family: Inter, sans-serif;
+  font-size: 10px;
   font-weight: 400;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f0f0f0;
-  padding: 4px 8px;
-  margin-right: 8px;
+  margin-right: 20px;
   cursor: pointer;
 }
 
@@ -136,7 +150,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 32px;
+  margin: 32px auto 0;
   width: 350px;
   box-sizing: border-box;
 }
