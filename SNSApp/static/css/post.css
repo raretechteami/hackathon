@@ -1,3 +1,10 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
 .page {
   min-height: 100vh;
   background-color: var(--bg, #fde89b);
@@ -148,23 +155,27 @@ header {
 .sugar_g {
   flex: 1;
   height: 44px;
-  padding: 4px 8px;
+  padding: 4px 6px;
   box-sizing: border-box;
   background: #fde68a;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .calories-label,
 .sugar-label {
   font-family: Inter, sans-serif;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 400;
   color: #333333;
   line-height: 1;
   margin-bottom: 2px;
+  text-align: center;
+  width: 100%;
 }
 
 .calories-value,
@@ -172,10 +183,14 @@ header {
   display: flex;
   align-items: baseline;
   font-family: Inter, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #000000;
   line-height: 1.2;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  
 }
 
 .calories-unit,

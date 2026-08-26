@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "auth/base.html" %}
 
 {% block title %}自ユーザー投稿詳細画面{% endblock %}
 
@@ -45,7 +45,7 @@
 
         <!-- 店舗 -->
          <p class="store-name">
-            {{ post.store_id }}
+            {{ post.store_name }}
         </p>
         
         <!-- カロリー・糖分 -->
@@ -88,8 +88,13 @@
 
     </div>
 
+    </div>
 
-<form method="POST" enctype="multipart/form-data">
+
+<form class="edit-form" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <!-- 商品名 -->
 
     <!-- 商品名 -->
     <div class="form-group">
@@ -193,14 +198,18 @@
         <button type="submit" class="edit-button">
             編集完了
         </button>
+    
+    </div>
+
+</form>
 
     <!-- 削除 -->
+<form class="delete-form" method="POST" action="{{ url_for('delete_post', post_id=post.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <button type="button" class="delete-button">
+        <button type="submit" class="delete-button">
             削除
         </button>
-
-    </div> 
 
 </form>
 

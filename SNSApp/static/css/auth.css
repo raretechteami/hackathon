@@ -1,6 +1,17 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .page-auth {
   min-height: 100vh;
   background: #ffe7a1;
+}
+
+.login-page {
+  padding-top: 90px;
+  box-sizing: border-box;
 }
 .auth-logo {
   display: flex;
@@ -62,6 +73,7 @@
 .auth-form input[type="password"] {
   width: 100%;
   height: 35.82px;
+  padding: 0 10px;
   box-sizing: border-box;
   border-radius: 8px;
   border: 1px solid #000000;

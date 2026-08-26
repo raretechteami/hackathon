@@ -1,24 +1,37 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
 /* =========================
    自ユーザー投稿詳細画面
    ========================= */
    .post-detail {
-    width: 402px;
-    min-height: 874px;
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
     margin: 0 auto;
     box-sizing: border-box;
-    padding: 97px 14px 0;
+    padding: 60px 14px 45px;
     background-color: var(--bg);
 }
+
 
 /* =========================
    一覧に戻るボタン
    ========================= */
   .top-nav {
-   width: 97px;
-   height: 40px;
+    width: 97px;
+    height: 40px;
+    position: relative;
+    top: 0;
+    z-index: 2;
+    margin-bottom: 20px;
 }
   .btn-back {
-    width: 97px;
+     width: 97px;
     height: 40px;
     border: none;
     border-radius: 20px;
@@ -42,6 +55,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+
 .post-card-inner {
     display: flex;
     gap: 14px;
@@ -54,9 +68,9 @@
    ========================= */
 
 .post-image-box {
-    width: 125px;
-    min-width: 125px;
-    height: 125px;
+    width: 140px;
+    min-width: 140px;
+    height: 140px;
     background-color: #f2f2f2;
     border-radius: 16px;
     overflow: hidden;
@@ -146,8 +160,9 @@
    ========================= */
 
 .edit-form {
-    width: 374px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 /* =========================
@@ -176,11 +191,12 @@
 
 
 .form-group input[type="text"] {
-    width: 350px;
+    width: 390px;
     height: 26px;
     box-sizing: border-box;
     border: 1px solid #AEAEB2;
     border-radius: 6px;
+    padding: 0 10px;
 }
 
 /* =========================
@@ -193,12 +209,12 @@
 }
 
 .form-row .form-group {
-    width: 166px;
+    width: 185px;
 }
 
 .form-row .form-group select,
 .form-row .form-group input {
-    width: 166px;
+    width: 185px;
     height: 26px;
     box-sizing: border-box;
     border: 1px solid #AEAEB2;
@@ -215,17 +231,20 @@
    ========================= */
 
 .form-group input[type="file"] {
-    width: 356px;
-    height: 32px;
+    width: 390px;
+    height: 30px;
     box-sizing: border-box;
     border: 1px solid #AEAEB2;
+    background-color: #FFFFFF;
     border-radius: 6px;
+    padding: 2px 8px;
 }
 
 .form-group input[type="file"]::file-selector-button {
     font-family: Inter, sans-serif;
     font-size: 10px;
     font-weight: 400;
+    margin-right: 20px;
 }
 
 /* =========================
@@ -238,13 +257,11 @@
 }
 
 .image-form-group {
-    margin-top: 11px;
      margin-top: 0;
 }
 
 .comment-form-group {
     margin-top: 18px;
-    margin-top: 11px;
 }
 
 /* =========================
@@ -262,7 +279,7 @@
     color: #000000;
 }
 .comment-form-group textarea {
-    width: 325px;
+    width: 390px;
     height: 126px;
     box-sizing: border-box;
     padding: 10px;
@@ -291,6 +308,7 @@
     font-family: Inter, sans-serif;
     font-size: 14px;
     font-weight: 600;
+
 }
 
 /* =========================
@@ -311,7 +329,14 @@
 
 .form-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+
+.delete-form {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -40px;
 }
 
 /* =========================
@@ -332,13 +357,13 @@
    ========================= */
 
 .comment-list {
-    width: 325px;
-    margin: 0 auto;
+    width: 390px;
+    margin: 15px auto 0;
 }
 
 .comment-item {
-    width: 325px;
-    height: 87px;
+    width: 390px;
+    height: 130px;
     box-sizing: border-box;
 
     background-color: #FFFFFF;

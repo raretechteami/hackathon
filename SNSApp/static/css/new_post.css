@@ -7,10 +7,10 @@ body {
 
 .new-post {
   width: 100%;
-  min-height: 874px;
+  min-height: 100vh;;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 40px 14px 40px;
+  padding: 116px 14px 40px;
   background-color: var(--bg, #fde89b);
 }
 

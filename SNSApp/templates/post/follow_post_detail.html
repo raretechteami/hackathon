@@ -1,4 +1,4 @@
-{% extends "auth/base.html" %} {% block title %} フォロワー投稿詳細画面 {{
+{% extends "auth/base.html" %} {% block title %} 他ユーザー投稿詳細画面 {{
 post.product_name }}{% endblock %} {% block page_css %}
 <link
   rel="stylesheet"
@@ -6,6 +6,13 @@ post.product_name }}{% endblock %} {% block page_css %}
 />
 {% endblock %} {% block content %}
 <div class="container detail-container">
+
+  <!-- おやつサポートロゴ -->
+<img
+    src="{{ url_for('static', filename='images/logo.svg') }}"
+    alt=""
+    class="top-logo"
+  >
   <!-- 一覧に戻るボタン -->
   <div class="top-nav">
     <button type="button" onclick="location.href='/posts'" class="btn-back">
@@ -74,9 +81,19 @@ post.product_name }}{% endblock %} {% block page_css %}
     </div>
   </div>
 
+  <!-- 投稿者のコメント -->
+  <div class="card post-content-card">
+    <h4 class="section-title">投稿コメント</h4>
+
+    <div class="post-content">
+      {{ post.content }}
+    </div>
+  </div>
+
   <!-- コメントセクション -->
   <div class="card comments-card">
     <h3 class="section-title">コメント</h3>
+
 
     <!-- コメント入力フォーム -->
     <form
