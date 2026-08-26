@@ -325,6 +325,7 @@ body {
     font-family: Inter, sans-serif;
     font-size: 14px;
     font-weight: 600;
+    transform: translateX(-10px);
 }
 
 .form-buttons {
