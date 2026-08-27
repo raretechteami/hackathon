@@ -17,6 +17,16 @@
         </button>
     </div>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- 投稿概要 -->
      <div class="card post-detail-card">
 
@@ -25,9 +35,12 @@
          <!-- 商品画像 -->
         <div class="post-image-box">
             {% if post.image_path %}
-            <img src="{{ url_for('static', filename=post.image_path) }}" alt="{{ post.product_name }}"
+            <img
+            src="{{ url_for('static', filename=post.image_path.replace('./static/', '')) }}"
+            alt="{{ post.product_name }}"
             class="product-image"
-            />
+            onerror="this.style.display='none'"
+        />
              {% endif %}
         </div>
 
@@ -91,7 +104,7 @@
     </div>
 
 
-<form class="edit-form" method="POST" enctype="multipart/form-data">
+<form class="edit-form" method="POST" action="{{ url_for('update_post', post_id=post.id) }}" enctype="multipart/form-data" novalidate>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <!-- 商品名 -->
@@ -207,7 +220,7 @@
 <form class="delete-form" method="POST" action="{{ url_for('delete_post', post_id=post.id) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <button type="submit" class="delete-button">
+        <button type="submit" class="delete-button" onclick="return confirm('本当に削除してもよろしいでしょうか？');">
             削除
         </button>
 
