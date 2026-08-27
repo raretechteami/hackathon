@@ -1,65 +1,64 @@
 html,
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
 }
 /* =========================
    自ユーザー投稿詳細画面
    ========================= */
-   .post-detail {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    margin: 0 auto;
-    box-sizing: border-box;
-    padding: 60px 14px 45px;
-    background-color: var(--bg);
+.post-detail {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 60px 14px 45px;
+  background-color: var(--bg, #fde89b);
 }
-
 
 /* =========================
    一覧に戻るボタン
    ========================= */
-  .top-nav {
-    width: 97px;
-    height: 40px;
-    position: relative;
-    top: 0;
-    z-index: 2;
-    margin-bottom: 20px;
+.top-nav {
+  width: 97px;
+  height: 40px;
+  position: relative;
+  top: 0;
+  z-index: 2;
+  margin-bottom: 20px;
 }
-  .btn-back {
-     width: 97px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background-color: #FFFFFF;
-    color: #000000;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-  }
+.btn-back {
+  width: 97px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
 
- /* =========================
+/* =========================
    投稿概要
    05画面と共通部分
    ========================= */
 
 .card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-
 .post-card-inner {
-    display: flex;
-    gap: 14px;
-    align-items: center;
+  display: flex;
+  gap: 14px;
+  align-items: center;
 }
 
 /* =========================
@@ -68,28 +67,28 @@ body {
    ========================= */
 
 .post-image-box {
-    width: 140px;
-    min-width: 140px;
-    height: 140px;
-    background-color: #f2f2f2;
-    border-radius: 16px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 140px;
+  min-width: 140px;
+  height: 140px;
+  background-color: #f2f2f2;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* =========================
    商品情報
    05画面と共通部分
    ========================= */
-  
+
 .post-info-box {
   flex: 1;
   min-width: 0;
@@ -123,36 +122,36 @@ body {
    ========================= */
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
 }
 
 .stat-badge {
-    border-radius: 10px;
-    padding: 4px 6px;
-    text-align: center;
+  border-radius: 10px;
+  padding: 4px 6px;
+  text-align: center;
 }
 
 .stat-label {
-    display: block;
-    font-size: 10px;
-    color: #555555;
+  display: block;
+  font-size: 10px;
+  color: #555555;
 }
 
 .stat-value {
-    font-size: 13px;
-    font-weight: bold;
-    color: #222222;
+  font-size: 13px;
+  font-weight: bold;
+  color: #222222;
 }
 
 .badge-yellow {
-    background-color: #fde68a;
+  background-color: #fde68a;
 }
 
 .badge-gray {
-    background-color: #f5f5f5;
-    border: 1px solid #e5e5e5;
+  background-color: #f5f5f5;
+  border: 1px solid #e5e5e5;
 }
 
 /* =========================
@@ -160,9 +159,9 @@ body {
    ========================= */
 
 .edit-form {
-     width: 390px;
-    margin: 0 auto;
-    box-sizing: border-box;
+  width: 390px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* =========================
@@ -170,33 +169,32 @@ body {
    ========================= */
 
 .form-group {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .form-group label {
-    display: block;
-    margin-left: 8px;
-    margin-bottom: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #000000;
+  display: block;
+  margin-left: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000000;
 }
 
 /* =========================
    商品名
    ========================= */
 
-
 .form-group input[type="text"] {
-    width: 390px;
-    height: 26px;
-    box-sizing: border-box;
-    border: 1px solid #AEAEB2;
-    border-radius: 6px;
-    padding: 0 10px;
+  width: 390px;
+  height: 26px;
+  box-sizing: border-box;
+  border: 1px solid #aeaeb2;
+  border-radius: 6px;
+  padding: 0 10px;
 }
 
 /* =========================
@@ -204,26 +202,25 @@ body {
    ========================= */
 
 .form-row {
-    display: flex;
-    gap: 18px;
+  display: flex;
+  gap: 18px;
 }
 
 .form-row .form-group {
-    width: 185px;
+  width: 185px;
 }
 
 .form-row .form-group select,
 .form-row .form-group input {
-    width: 185px;
-    height: 26px;
-    box-sizing: border-box;
-    border: 1px solid #AEAEB2;
-    border-radius: 6px;
-    background-color: #FFFFFF;
-    padding: 0 10px;
-    font-size: 14px;
+  width: 185px;
+  height: 26px;
+  box-sizing: border-box;
+  border: 1px solid #aeaeb2;
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 0 10px;
+  font-size: 14px;
 }
-
 
 /* =========================
    商品画像
@@ -231,20 +228,20 @@ body {
    ========================= */
 
 .form-group input[type="file"] {
-    width: 390px;
-    height: 30px;
-    box-sizing: border-box;
-    border: 1px solid #AEAEB2;
-    background-color: #FFFFFF;
-    border-radius: 6px;
-    padding: 2px 8px;
+  width: 390px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid #aeaeb2;
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 2px 8px;
 }
 
 .form-group input[type="file"]::file-selector-button {
-    font-family: Inter, sans-serif;
-    font-size: 10px;
-    font-weight: 400;
-    margin-right: 20px;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  margin-right: 20px;
 }
 
 /* =========================
@@ -252,16 +249,16 @@ body {
    ========================= */
 
 .nutrition-row {
-    margin-top: 6px;
-    margin-bottom: 0;
+  margin-top: 6px;
+  margin-bottom: 0;
 }
 
 .image-form-group {
-     margin-top: 0;
+  margin-top: 0;
 }
 
 .comment-form-group {
-    margin-top: 18px;
+  margin-top: 18px;
 }
 
 /* =========================
@@ -269,29 +266,29 @@ body {
    ========================= */
 
 .comment-form-group {
-    margin-top: 11px;
+  margin-top: 11px;
 }
 
 .comment-form-group label {
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: #000000;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
 }
 .comment-form-group textarea {
-    width: 390px;
-    height: 126px;
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid #AEAEB2;
-    border-radius: 8px;
-    background-color: #FFFFFF;
-    font-family: Inter, sans-serif;
-    font-size: 16px;
-    color: #000000;
-    resize: none;
+  width: 390px;
+  height: 126px;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #aeaeb2;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  color: #000000;
+  resize: none;
 
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 /* =========================
@@ -299,45 +296,46 @@ body {
    ========================= */
 
 .edit-button {
-    width: 97px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background-color: #AFF4C6;
-    color: #000000;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-
+  width: 97px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #aff4c6;
+  color: #000000;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* =========================
    削除ボタン
    ========================= */
 
+.delete-form {
+  width: 390px;
+  max-width: 100%;
+  margin: -40px auto 0;
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+}
+
 .delete-button {
-    width: 97px;
-    height: 40px;
-    border: none;
-    border-radius: 20px;
-    background-color: #FF695D;
-    color: #000000;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    transform: translateX(-10px);
+  width: 97px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ff695d;
+  color: #000000;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .form-buttons {
-    display: flex;
-    justify-content: flex-start;
-}
-
-
-.delete-form {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -40px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 /* =========================
@@ -345,12 +343,12 @@ body {
    ========================= */
 
 .comment-item {
-    width: 325px;
-    height: 94.14px;
-    box-sizing: border-box;
-    border: 1px solid #AEAEB2;
-    border-radius: 8px;
-    background-color: #FFFFFF;
+  width: 325px;
+  height: 94.14px;
+  box-sizing: border-box;
+  border: 1px solid #aeaeb2;
+  border-radius: 8px;
+  background-color: #ffffff;
 }
 
 /* =========================
@@ -358,28 +356,28 @@ body {
    ========================= */
 
 .comment-list {
-    width: 390px;
-    margin: 15px auto 0;
-    box-sizing: border-box;
+  width: 390px;
+  margin: 15px auto 0;
+  box-sizing: border-box;
 }
 
 .comment-item {
-    width: 100%;
-    height: 130px;
-    box-sizing: border-box;
+  width: 100%;
+  height: 130px;
+  box-sizing: border-box;
 
-    background-color: #FFFFFF;
-    border: 1px solid #AEAEB2;
-    border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid #aeaeb2;
+  border-radius: 8px;
 
-    overflow-y: auto;
+  overflow-y: auto;
 
-    padding: 6px;
+  padding: 6px;
 }
 
 /* コメント同士の間隔 */
 .comment-item + .comment-item {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 /* =========================
@@ -387,15 +385,14 @@ body {
    ========================= */
 
 .comment-user-name {
-    width: 71px;
-    height: 19.22px;
-    margin: 0;
+  width: 71px;
+  height: 19.22px;
+  margin: 0;
 
-    font-family: Inter, sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: #000000;
-
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #000000;
 }
 
 /* =========================
@@ -403,12 +400,12 @@ body {
    ========================= */
 
 .comment-date {
-    margin: 0;
+  margin: 0;
 
-    font-family: Inter, sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: #AEAEB2;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #aeaeb2;
 }
 
 /* =========================
@@ -416,11 +413,36 @@ body {
    ========================= */
 
 .comment-content {
-    margin: 3.31px 0 0;
+  margin: 3.31px 0 0;
 
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: #000000;
-    line-height: normal;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  line-height: normal;
+}
+
+.flash-messages {
+  max-width: 374px;
+  margin: 20px auto 16px;
+}
+
+.flash {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.flash-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.flash-success {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
 }
